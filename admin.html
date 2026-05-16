@@ -860,7 +860,7 @@
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-9"></script>
+    <script src="/js/site-admin-content.js?v=20260516-10"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -1189,6 +1189,10 @@
             .syncRemoteContent()
             .then(function (remoteContent) {
               if (!remoteContent) {
+                setStatus(
+                  'Live API unavailable. Enable PHP execution for /api/site-content.php.',
+                  true
+                );
                 return;
               }
               loadIntoForm();
@@ -2138,7 +2142,7 @@
               setStatus('Saved successfully and synced live for all users.', false);
             } else {
               setStatus(
-                'Saved locally, but live sync failed. Check /api/site-content.php on server.',
+                'Saved locally only. Live API failed, enable PHP for /api/site-content.php.',
                 true
               );
             }
@@ -2169,7 +2173,7 @@
           if (remoteSaved) {
             setStatus('Reset completed and synced live.', false);
           } else {
-            setStatus('Reset locally, but live sync failed. Check /api/site-content.php.', true);
+            setStatus('Reset locally only. Live API failed, enable PHP for /api/site-content.php.', true);
           }
         });
 

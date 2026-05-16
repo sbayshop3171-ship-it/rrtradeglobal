@@ -758,7 +758,24 @@
         body: JSON.stringify({ content: content }),
       })
       .then(function (response) {
-        return response.ok;
+        if (!response.ok) {
+          return false;
+        }
+
+        return response
+          .json()
+          .then(function (payload) {
+            if (!payload || typeof payload !== 'object') {
+              return false;
+            }
+            if (payload.success === false) {
+              return false;
+            }
+            return true;
+          })
+          .catch(function () {
+            return false;
+          });
       })
       .catch(function () {
         return false;

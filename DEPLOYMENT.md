@@ -43,6 +43,9 @@ You should get JSON like:
 
 `{"success":true,"content":null}`
 
+If you see raw PHP code in the browser instead of JSON, PHP execution is disabled for the domain.  
+Enable PHP in your hosting control panel (or move the site to a PHP-enabled host), then test again.
+
 ## 2. Create Deploy SSH Key
 
 Run on your local machine:
