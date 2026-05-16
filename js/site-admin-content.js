@@ -3,6 +3,8 @@
   var COOKIE_KEY = 'bricknet_admin_content_v1_cookie';
   var SESSION_KEY = 'bricknet_admin_session_v1';
 
+  var CORE_VALUES_VERSION = 'v2';
+
   var DEFAULT_CONTENT = {
     siteName: 'Bricknet',
     logoWhiteUrl: 'images/logo-white.svg',
@@ -68,33 +70,35 @@
     valuesTitle: 'Why Bricknet?',
     valuesDescription:
       'Trusted by industry leaders, built for long-lasting results, and designed to deliver reliable, enduring success.',
+    valuesItemsVersion: CORE_VALUES_VERSION,
     valuesItems: [
       {
-        title: 'Quality Craftsmanship',
+        title: 'Premium Quality',
         description:
-          'We prioritize attention to detail and use high-quality materials for lasting, exceptional results.',
-        icon: 'images/icon-jackhammer@1x.png',
-        iconAlt: 'Quality Craftsmanship icon',
+          'Symbolizing trusted food-grade quality through lab testing and certified materials.',
+        icon: 'images/icon-premium-quality.svg',
+        iconAlt: 'Premium Quality icon',
       },
       {
-        title: 'Timely Delivery',
-        description: 'We value your time and ensure projects are completed on schedule.',
-        icon: 'images/icon-clock-seven@1x.png',
-        iconAlt: 'Timely Delivery icon',
+        title: 'Ontime Supply',
+        description:
+          'Symbolizing on-time logistics and uninterrupted bulk delivery to factory gates.',
+        icon: 'images/icon-ontime-supply.svg',
+        iconAlt: 'Ontime Supply icon',
       },
       {
-        title: 'Safety First',
+        title: 'Safety & Compliance',
         description:
-          'We maintain top safety standards to protect both our team and your property.',
-        icon: 'images/icon-constructor@1x.png',
-        iconAlt: 'Safety First icon',
+          'Symbolizing 100% hygiene, safe food-grade packing, and Halal/ISO compliance.',
+        icon: 'images/icon-safety-compliance.svg',
+        iconAlt: 'Safety & Compliance icon',
       },
       {
-        title: 'Innovative Solutions',
+        title: 'Global Sourcing',
         description:
-          'We prioritize attention to detail and use high-quality materials for lasting results.',
-        icon: 'images/icon-rainbow@1x.png',
-        iconAlt: 'Innovative Solutions icon',
+          'Symbolizing direct global import sourcing from Switzerland, New Zealand, and Denmark.',
+        icon: 'images/icon-global-sourcing.svg',
+        iconAlt: 'Global Sourcing icon',
       },
     ],
     featuredProjectsTitle: 'Featured Projects',
@@ -208,6 +212,13 @@
     }
     var trimmed = value.trim();
     return trimmed || fallback;
+  }
+
+  function cleanVersion(value) {
+    if (typeof value !== 'string') {
+      return '';
+    }
+    return value.trim();
   }
 
   function cleanBrand(brand, index) {
@@ -335,6 +346,17 @@
     return safeList;
   }
 
+  function upgradeCoreValuesIfNeeded(content) {
+    if (!content || content.valuesItemsVersion === CORE_VALUES_VERSION) {
+      return false;
+    }
+
+    // One-time migration to the new premium core values pack.
+    content.valuesItems = clone(DEFAULT_CONTENT.valuesItems);
+    content.valuesItemsVersion = CORE_VALUES_VERSION;
+    return true;
+  }
+
   function sanitizeContent(content) {
     var fallback = clone(DEFAULT_CONTENT);
     var legacyAboutTitle = [
@@ -374,6 +396,7 @@
         content && content.valuesDescription,
         fallback.valuesDescription
       ),
+      valuesItemsVersion: cleanVersion(content && content.valuesItemsVersion),
       valuesItems: sanitizeList(
         content && content.valuesItems,
         fallback.valuesItems,
@@ -443,7 +466,12 @@
       if (!raw) {
         return clone(DEFAULT_CONTENT);
       }
-      return sanitizeContent(JSON.parse(raw));
+      var safe = sanitizeContent(JSON.parse(raw));
+      var upgraded = upgradeCoreValuesIfNeeded(safe);
+      if (upgraded) {
+        writeStoredRaw(JSON.stringify(safe));
+      }
+      return safe;
     } catch (error) {
       return clone(DEFAULT_CONTENT);
     }
