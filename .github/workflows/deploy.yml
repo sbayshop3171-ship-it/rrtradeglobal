@@ -67,7 +67,6 @@ jobs:
             ./ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
 
       - name: Run post-deploy command (optional)
-        if: ${{ secrets.DEPLOY_POST_CMD != '' }}
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
@@ -76,5 +75,8 @@ jobs:
         run: |
           set -euo pipefail
           port="${DEPLOY_PORT:-22}"
-          ssh -i ~/.ssh/id_ed25519 -p "$port" "${DEPLOY_USER}@${DEPLOY_HOST}" "set -e; ${DEPLOY_POST_CMD}"
-
+          if [ -n "${DEPLOY_POST_CMD:-}" ]; then
+            ssh -i ~/.ssh/id_ed25519 -p "$port" "${DEPLOY_USER}@${DEPLOY_HOST}" "set -e; ${DEPLOY_POST_CMD}"
+          else
+            echo "DEPLOY_POST_CMD not set, skipping post-deploy command."
+          fi
