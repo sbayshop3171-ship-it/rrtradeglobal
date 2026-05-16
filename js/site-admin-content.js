@@ -1,5 +1,6 @@
 (function () {
   var STORAGE_KEY = 'bricknet_admin_content_v1';
+  var COOKIE_KEY = 'bricknet_admin_content_v1_cookie';
   var SESSION_KEY = 'bricknet_admin_session_v1';
 
   var DEFAULT_CONTENT = {
@@ -8,7 +9,7 @@
     logoColorUrl: 'images/logo-color.svg',
     logoFooterUrl: 'images/logo-multi-color.svg',
     aboutTitle:
-      'With decades of experience, we specialize in turning ideas into well-designed structures that stand the test of time.',
+      'With global sourcing experience, we specialize in delivering premium, certified food ingredients directly to Bangladesh\'s industries.',
     aboutCtaText: 'Get to Know Us',
     aboutCtaUrl: 'about.html',
     shortTitle: 'Your Best-Construction Partner',
@@ -183,7 +184,7 @@
 
   function loadContent() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      var raw = readStoredRaw();
       if (!raw) {
         return clone(DEFAULT_CONTENT);
       }
@@ -195,13 +196,78 @@
 
   function saveContent(content) {
     var sanitized = sanitizeContent(content);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+    writeStoredRaw(JSON.stringify(sanitized));
     return sanitized;
   }
 
   function resetContent() {
-    localStorage.removeItem(STORAGE_KEY);
+    clearStoredRaw();
     return clone(DEFAULT_CONTENT);
+  }
+
+  function readCookie(name) {
+    var parts = document.cookie ? document.cookie.split('; ') : [];
+    for (var i = 0; i < parts.length; i += 1) {
+      var item = parts[i];
+      if (item.indexOf(name + '=') === 0) {
+        return decodeURIComponent(item.slice(name.length + 1));
+      }
+    }
+    return '';
+  }
+
+  function writeCookie(name, value) {
+    document.cookie =
+      name +
+      '=' +
+      encodeURIComponent(value) +
+      '; path=/; max-age=31536000; SameSite=Lax';
+  }
+
+  function clearCookie(name) {
+    document.cookie = name + '=; path=/; max-age=0; SameSite=Lax';
+  }
+
+  function readStoredRaw() {
+    try {
+      var localRaw = localStorage.getItem(STORAGE_KEY);
+      if (localRaw) {
+        return localRaw;
+      }
+    } catch (error) {
+      // localStorage may be blocked in some browsers/private modes.
+    }
+
+    var cookieRaw = readCookie(COOKIE_KEY);
+    if (cookieRaw) {
+      return cookieRaw;
+    }
+
+    return '';
+  }
+
+  function writeStoredRaw(raw) {
+    var localSaved = false;
+
+    try {
+      localStorage.setItem(STORAGE_KEY, raw);
+      localSaved = true;
+    } catch (error) {
+      localSaved = false;
+    }
+
+    if (!localSaved) {
+      writeCookie(COOKIE_KEY, raw);
+    }
+  }
+
+  function clearStoredRaw() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      // ignore
+    }
+    clearCookie(COOKIE_KEY);
   }
 
   function setText(id, value) {
