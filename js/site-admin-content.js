@@ -14,6 +14,7 @@
       'With global sourcing experience, we specialize in delivering premium, certified food ingredients directly to Bangladesh\'s industries.',
     aboutCtaText: 'Get to Know Us',
     aboutCtaUrl: 'about.html',
+    showProjectsNavItem: true,
     shortTitle: 'Your Best-Construction Partner',
     heroTitle: 'Building Your Vision from the Ground Up',
     heroDescription:
@@ -222,6 +223,13 @@
     return value.trim();
   }
 
+  function cleanBoolean(value, fallback) {
+    if (typeof value === 'boolean') {
+      return value;
+    }
+    return fallback;
+  }
+
   function cleanBrand(brand, index) {
     var fallback = DEFAULT_CONTENT.brands[index] || {
       name: 'Brand ' + (index + 1),
@@ -381,6 +389,10 @@
       ),
       aboutCtaText: cleanString(content && content.aboutCtaText, fallback.aboutCtaText),
       aboutCtaUrl: cleanString(content && content.aboutCtaUrl, fallback.aboutCtaUrl),
+      showProjectsNavItem: cleanBoolean(
+        content && content.showProjectsNavItem,
+        fallback.showProjectsNavItem
+      ),
       shortTitle: cleanString(content && content.shortTitle, fallback.shortTitle),
       heroTitle: cleanString(content && content.heroTitle, fallback.heroTitle),
       heroDescription: cleanString(content && content.heroDescription, fallback.heroDescription),
@@ -625,6 +637,14 @@
 
     picture.querySelectorAll('source').forEach(function (source) {
       source.setAttribute('srcset', imageUrl);
+    });
+  }
+
+  function toggleProjectsNavItem(isVisible) {
+    var selectors = ['.header nav a[href*="projects.html"]', '.header-mobile nav a[href*="projects.html"]'];
+    document.querySelectorAll(selectors.join(', ')).forEach(function (link) {
+      var container = link.closest('li') || link;
+      container.hidden = !isVisible;
     });
   }
 
@@ -1177,6 +1197,7 @@
     setText('hero-title', content.heroTitle);
     setText('admin-hero-description', content.heroDescription);
     setPictureImageById('hero-parallax', content.heroBackgroundUrl);
+    toggleProjectsNavItem(content.showProjectsNavItem);
     setText('about-title-text', content.aboutTitle);
     setLink('about-cta-link', content.aboutCtaText, content.aboutCtaUrl);
 

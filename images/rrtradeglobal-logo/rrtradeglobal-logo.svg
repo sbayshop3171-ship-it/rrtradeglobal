@@ -1,0 +1,25 @@
+<svg width="760" height="180" viewBox="0 0 760 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rrg-orbit" x1="14" y1="14" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF7A33"/>
+      <stop offset="1" stop-color="#F24822"/>
+    </linearGradient>
+    <linearGradient id="rrg-dot" x1="75" y1="20" x2="93" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F3D77"/>
+      <stop offset="1" stop-color="#0D1E3E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Transparent background logo: icon + name -->
+  <g transform="translate(12 24)">
+    <circle cx="56" cy="56" r="50" stroke="url(#rrg-orbit)" stroke-width="12"/>
+    <path d="M35 83V43H48V50.6C51.7 44.9 57.1 42 64.2 42C73.3 42 79.2 47.7 79.2 56.8V83H66.2V59.8C66.2 55.7 63.8 53.2 60.1 53.2C55.5 53.2 52.3 56.6 52.3 61.5V83H35Z" fill="#122548"/>
+    <circle cx="84" cy="29" r="9" fill="url(#rrg-dot)"/>
+  </g>
+
+  <g transform="translate(126 44)">
+    <text x="0" y="52" fill="#122548" font-size="58" font-weight="700" font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" letter-spacing="0.2">rrtrade</text>
+    <text x="312" y="52" fill="#F24822" font-size="34" font-weight="700" font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" letter-spacing="0.2">global</text>
+    <text x="2" y="84" fill="#526078" font-size="14" font-weight="500" font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" letter-spacing="1.8">RRTRADEGLOBAL</text>
+  </g>
+</svg>

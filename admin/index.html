@@ -116,7 +116,8 @@
       }
 
       input,
-      textarea {
+      textarea,
+      select {
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 10px;
@@ -412,6 +413,13 @@
                   Short Title (Top Badge)
                   <input id="shortTitle" type="text" />
                 </label>
+                <label class="span-2">
+                  Projects Menu in Navigation
+                  <select id="showProjectsNavItem">
+                    <option value="1">ON - Show Projects Menu</option>
+                    <option value="0">OFF - Hide Projects Menu</option>
+                  </select>
+                </label>
               </div>
             </section>
 
@@ -655,7 +663,7 @@
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-6"></script>
+    <script src="/js/site-admin-content.js?v=20260516-7"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -692,6 +700,7 @@
 
         var fields = {
           siteName: document.getElementById('siteName'),
+          showProjectsNavItem: document.getElementById('showProjectsNavItem'),
           logoWhiteUrl: document.getElementById('logoWhiteUrl'),
           logoColorUrl: document.getElementById('logoColorUrl'),
           logoFooterUrl: document.getElementById('logoFooterUrl'),
@@ -1279,6 +1288,7 @@
           var content = api.loadContent();
           currentContent = content;
           fields.siteName.value = content.siteName || '';
+          fields.showProjectsNavItem.value = content.showProjectsNavItem === false ? '0' : '1';
           fields.logoWhiteUrl.value = content.logoWhiteUrl || '';
           fields.logoColorUrl.value = content.logoColorUrl || '';
           fields.logoFooterUrl.value = content.logoFooterUrl || '';
@@ -1451,6 +1461,7 @@
 
           return {
             siteName: fields.siteName.value,
+            showProjectsNavItem: fields.showProjectsNavItem.value === '1',
             logoWhiteUrl: fields.logoWhiteUrl.value,
             logoColorUrl: fields.logoColorUrl.value,
             logoFooterUrl: fields.logoFooterUrl.value,
