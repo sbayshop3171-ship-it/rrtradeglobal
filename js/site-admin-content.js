@@ -7,18 +7,10 @@
     logoWhiteUrl: 'images/logo-white.svg',
     logoColorUrl: 'images/logo-color.svg',
     logoFooterUrl: 'images/logo-multi-color.svg',
-    aboutLabel: 'About Us',
-    aboutTitlePrefix: 'With decades of experience, we specialize in turning ideas into',
-    aboutTitleHighlight: 'well-designed structures',
-    aboutTitleSuffix: 'that stand the test of time.',
+    aboutTitle:
+      'With decades of experience, we specialize in turning ideas into well-designed structures that stand the test of time.',
     aboutCtaText: 'Get to Know Us',
     aboutCtaUrl: 'about.html',
-    aboutStats: [
-      { value: '10+', label: 'Years of Experience' },
-      { value: '1500+', label: 'Projects Completed' },
-      { value: '4.8/5', label: 'Customer Satisfaction Score' },
-      { value: '98%', label: 'Project Success Rate' },
-    ],
     shortTitle: 'Your Best-Construction Partner',
     heroTitle: 'Building Your Vision from the Ground Up',
     heroDescription:
@@ -58,47 +50,34 @@
     };
   }
 
-  function cleanStat(stat, index) {
-    var fallback = DEFAULT_CONTENT.aboutStats[index] || {
-      value: '0',
-      label: 'Stat',
-    };
-
-    return {
-      value: cleanString(stat && stat.value, fallback.value),
-      label: cleanString(stat && stat.label, fallback.label),
-    };
-  }
-
   function sanitizeContent(content) {
     var fallback = clone(DEFAULT_CONTENT);
+    var legacyAboutTitle = [
+      content && content.aboutTitlePrefix,
+      content && content.aboutTitleHighlight,
+      content && content.aboutTitleSuffix,
+    ]
+      .filter(function (part) {
+        return typeof part === 'string' && part.trim();
+      })
+      .join(' ');
+
     var safe = {
       siteName: cleanString(content && content.siteName, fallback.siteName),
       logoWhiteUrl: cleanString(content && content.logoWhiteUrl, fallback.logoWhiteUrl),
       logoColorUrl: cleanString(content && content.logoColorUrl, fallback.logoColorUrl),
       logoFooterUrl: cleanString(content && content.logoFooterUrl, fallback.logoFooterUrl),
-      aboutLabel: cleanString(content && content.aboutLabel, fallback.aboutLabel),
-      aboutTitlePrefix: cleanString(content && content.aboutTitlePrefix, fallback.aboutTitlePrefix),
-      aboutTitleHighlight: cleanString(
-        content && content.aboutTitleHighlight,
-        fallback.aboutTitleHighlight
+      aboutTitle: cleanString(
+        content && content.aboutTitle,
+        legacyAboutTitle || fallback.aboutTitle
       ),
-      aboutTitleSuffix: cleanString(content && content.aboutTitleSuffix, fallback.aboutTitleSuffix),
       aboutCtaText: cleanString(content && content.aboutCtaText, fallback.aboutCtaText),
       aboutCtaUrl: cleanString(content && content.aboutCtaUrl, fallback.aboutCtaUrl),
-      aboutStats: [],
       shortTitle: cleanString(content && content.shortTitle, fallback.shortTitle),
       heroTitle: cleanString(content && content.heroTitle, fallback.heroTitle),
       heroDescription: cleanString(content && content.heroDescription, fallback.heroDescription),
       brands: [],
     };
-
-    var aboutStats = Array.isArray(content && content.aboutStats)
-      ? content.aboutStats
-      : fallback.aboutStats;
-    safe.aboutStats = fallback.aboutStats.map(function (_, index) {
-      return cleanStat(aboutStats[index], index);
-    });
 
     var brands = Array.isArray(content && content.brands) ? content.brands : fallback.brands;
     safe.brands = brands.slice(0, 8).map(cleanBrand);
@@ -228,20 +207,8 @@
     setText('admin-short-title', content.shortTitle);
     setText('hero-title', content.heroTitle);
     setText('admin-hero-description', content.heroDescription);
-    setText('about-badge-label', content.aboutLabel);
-    setText('about-title-prefix', content.aboutTitlePrefix);
-    setText('about-title-highlight', content.aboutTitleHighlight);
-    setText('about-title-suffix', content.aboutTitleSuffix);
+    setText('about-title-text', content.aboutTitle);
     setLink('about-cta-link', content.aboutCtaText, content.aboutCtaUrl);
-
-    setText('about-stat-1-value', content.aboutStats[0].value);
-    setText('about-stat-1-label', content.aboutStats[0].label);
-    setText('about-stat-2-value', content.aboutStats[1].value);
-    setText('about-stat-2-label', content.aboutStats[1].label);
-    setText('about-stat-3-value', content.aboutStats[2].value);
-    setText('about-stat-3-label', content.aboutStats[2].label);
-    setText('about-stat-4-value', content.aboutStats[3].value);
-    setText('about-stat-4-label', content.aboutStats[3].label);
 
     setPictureLogoByImageSelector('img.logo-white', content.logoWhiteUrl, content.siteName);
 
