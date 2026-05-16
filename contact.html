@@ -270,7 +270,7 @@
     <!-- prettier-ignore -->
     <section
       class="self-stretch mt-[80px] lg:mt-[118px] px-5 lg:px-20 pt-20 pb-20 flex flex-col justify-center items-center gap-10 overflow-hidden"
-      aria-labelledby="hero-title"
+      aria-labelledby="contact-hero-title"
     >
       <p
         class="px-4 py-1.5 rounded-full mb-4 lg:mb-0 outline-[0.50px] outline-offset-[-0.50px] outline-secondary-navy inline-flex justify-center items-center gap-2"
@@ -283,6 +283,7 @@
           ></span>
         </span>
         <span
+          id="contact-hero-label"
           class="justify-center text-secondary-navy text-sm font-medium leading-normal"
         >
            Our Contact     </span>
@@ -292,12 +293,13 @@
       >
         <h1
           data-aos="fade"
-          id="hero-title"
+          id="contact-hero-title"
           class="self-stretch text-center justify-start text-secondary-navy text-4xl lg:text-[80px] font-medium leading-tight lg:leading-[88px] max-w-7xl mx-auto"
         >
            Let’s Talk About Your Project 
         </h1>
         <p
+          id="contact-hero-description"
           data-aos="fade"
           data-aos-delay="300"
           class="text-center justify-start text-base-grey text-lg font-normal leading-tight lg:leading-relaxed max-w-[750px]"
@@ -322,7 +324,7 @@
       class="flex flex-col justify-start items-start gap-20"
     >
       <div class="self-stretch flex flex-col justify-start items-start gap-10">
-        <span class="label label-solid-orange" aria-label="Contact Details">
+        <span id="contact-details-label" class="label label-solid-orange" aria-label="Contact Details">
           Contact Details
         </span>
         
@@ -334,6 +336,7 @@
             Let's Work Together
           </h2>
           <p
+            id="contact-details-description"
             class="self-stretch justify-start text-base-white-background text-lg font-normal leading-tight"
           >
             Whether you have a question, need more details about our services,
@@ -349,11 +352,13 @@
             class="flex-1 w-full pt-8 border-t-[0.80px] border-base-grey-stroke flex flex-col justify-start items-start gap-4"
           >
             <h3
+              id="contact-message-label"
               class="self-stretch justify-start text-base-grey-stroke text-xl font-normal leading-tight"
             >
               Message Us
             </h3>
             <p
+              id="contact-message-value"
               class="self-stretch justify-start text-white text-lg font-medium leading-tight"
             >
               contact@bricknetbuilds.com
@@ -363,11 +368,13 @@
             class="flex-1 w-full pt-8 border-t-[0.80px] border-base-grey-stroke flex flex-col justify-start items-start gap-4"
           >
             <h3
+              id="contact-call-label"
               class="self-stretch justify-start text-base-grey-stroke text-xl font-normal leading-tight"
             >
               Call Us
             </h3>
             <p
+              id="contact-call-value"
               class="self-stretch justify-start text-white text-lg font-medium leading-tight"
             >
               (555) 483-2190
@@ -378,11 +385,12 @@
           class="self-stretch pt-8 border-t-[0.50px] border-base-grey-stroke flex flex-col lg:flex-row justify-between items-start gap-4"
         >
           <h3
+            id="contact-location-label"
             class="justify-start text-base-grey-stroke text-xl font-normal leading-tight"
           >
             Location
           </h3>
-          <p class="justify-start text-white text-lg font-medium leading-tight">
+          <p id="contact-location-value" class="justify-start text-white text-lg font-medium leading-tight">
             82 Westfield Industrial Blvd, San Diego, CA 92101
           </p>
         </div>
@@ -390,22 +398,26 @@
           class="self-stretch pt-8 border-t-[0.50px] border-base-grey-stroke flex flex-col lg:flex-row justify-between items-start gap-4"
         >
           <h3
+            id="contact-hours-label"
             class="justify-start text-base-grey-stroke text-xl font-normal leading-tight"
           >
             Business Hours
           </h3>
           <div class="flex flex-col justify-center items-start gap-4">
             <p
+              id="contact-hours-line-1"
               class="justify-start text-white text-lg font-medium leading-tight"
             >
               Monday - Friday, 8:00 AM - 6:00 PM
             </p>
             <p
+              id="contact-hours-line-2"
               class="self-stretch justify-start text-white text-lg font-medium leading-tight"
             >
               Saturday: 9:00 AM – 2:00 PM
             </p>
             <p
+              id="contact-hours-line-3"
               class="self-stretch justify-start text-white text-lg font-medium leading-tight"
             >
               Sunday: Closed
@@ -425,6 +437,7 @@
       aria-label="Contact form"
     >
       <h2
+        id="contact-form-title"
         class="self-stretch text-center justify-start text-secondary-navy text-2xl font-medium leading-10"
       >
         Send Us Message!
@@ -433,7 +446,7 @@
         <div
           class="input-group self-stretch flex flex-col justify-start items-start gap-3"
         >
-          <label for="fullName"> Full Name* </label>
+          <label id="contact-form-label-full-name" for="fullName"> Full Name* </label>
           <input
             type="text"
             id="fullName"
@@ -441,12 +454,13 @@
             required
             aria-required="true"
             placeholder="Your name"
+            data-role="contact-form-placeholder-full-name"
           />
         </div>
         <div
           class="input-group self-stretch flex flex-col justify-start items-start gap-3"
         >
-          <label for="email"> Email Address* </label>
+          <label id="contact-form-label-email" for="email"> Email Address* </label>
           <input
             type="email"
             id="email"
@@ -454,6 +468,7 @@
             required
             aria-required="true"
             placeholder="Your email"
+            data-role="contact-form-placeholder-email"
           />
         </div>
         <div
@@ -462,7 +477,7 @@
           <div
             class="input-group flex-1 w-full flex flex-col justify-start items-start gap-3"
           >
-            <label for="phone"> Phone Number* </label>
+            <label id="contact-form-label-phone" for="phone"> Phone Number* </label>
             <input
               type="tel"
               id="phone"
@@ -470,12 +485,13 @@
               required
               aria-required="true"
               placeholder="Your phone number"
+              data-role="contact-form-placeholder-phone"
             />
           </div>
           <div
             class="input-group flex-1 w-full flex flex-col justify-start items-start gap-3"
           >
-            <label for="projectType"> Project Type* </label>
+            <label id="contact-form-label-project-type" for="projectType"> Project Type* </label>
             <div class="relative self-stretch input-select-wrapper">
               <select
                 id="projectType"
@@ -485,6 +501,7 @@
                 class="w-full"
               >
                 <option
+                  id="contact-form-project-type-placeholder"
                   value=""
                   disabled
                   selected
@@ -504,7 +521,7 @@
         <div
           class="input-group self-stretch flex flex-col justify-start items-start gap-3"
         >
-          <label for="message"> Message* </label>
+          <label id="contact-form-label-message" for="message"> Message* </label>
           <textarea
             id="message"
             name="message"
@@ -512,6 +529,7 @@
             aria-required="true"
             rows="6"
             placeholder="Tell us about your project..."
+            data-role="contact-form-placeholder-message"
             class="resize-none h-36"
           ></textarea>
         </div>
@@ -524,7 +542,7 @@
        
         tabindex="0"
       >
-        Send Message
+        <span id="contact-form-button-text">Send Message</span>
         <i class="btn-icon ph ph-arrow-right text-xl" aria-hidden="true"></i>
       </button>
     </form>
@@ -585,7 +603,7 @@
     <header
       class="self-stretch flex flex-col justify-start items-center gap-10"
     >
-      <span class="label label-solid-orange" aria-label="FAQs">
+      <span id="contact-faq-label" class="label label-solid-orange" aria-label="FAQs">
         FAQs
       </span>
       
@@ -597,6 +615,7 @@
           Need Help Before You Build?
         </h2>
         <p
+          id="contact-faq-description"
           class="text-center text-base-grey text-lg font-normal leading-relaxed"
         >
           Find quick answers to the most common inquiries from new and returning
@@ -606,6 +625,7 @@
     </header>
 
     <div
+      id="contact-faq-list"
       class="self-stretch flex flex-col justify-start items-center"
      
       aria-label="Frequently Asked Questions"
@@ -786,65 +806,6 @@
         </div>
       </details>
     </div>
-  </div>
-</section>
-<section
-  data-variant="v2"
-  data-version="dekstop"
-  class="bg-primary-light-orange relative"
-  aria-labelledby="cta-title"
- 
->
-  <div class="wrapper flex flex-col lg:flex-row justify-start items-start">
-    <div
-      class="px-5 py-20 lg:p-20 w-full lg:w-1/2 flex flex-col justify-center items-start gap-10"
-    >
-      <div class="self-stretch flex flex-col justify-start items-start gap-6">
-        <h2
-          id="cta-title"
-          class="self-stretch justify-start text-secondary-navy text-4xl font-medium leading-tight"
-        >
-          Find the Right Service for Your Build
-        </h2>
-        <p
-          class="self-stretch justify-start text-secondary-navy text-lg font-normal leading-relaxed"
-        >
-          Explore our construction services for new homes, resident, expansions,
-          and renovations.
-        </p>
-      </div>
-      <a
-        href="projects.html"
-        class="btn group btn-solid-dark"
-        aria-label="View All
-            Projects"
-       
-        tabindex="0"
-      >
-        View All
-            Projects
-        <i
-          class="btn-icon ph ph-arrow-right text-xl"
-          aria-hidden="true"
-        ></i>
-      </a>
-    </div>
-
-    <picture class="lg:absolute z-10 top-0 right-0 bottom-0
-        aspect-square lg:aspect-auto lg:w-1/2">
-      <source
-        srcset="images/picture-minihero@1x.webp 1x, images/picture-minihero@2x.webp 2x, images/picture-minihero@2x.webp 3x"
-        type="image/webp"
-      />
-      <img
-        class="h-full w-full object-cover"
-        src="images/picture-minihero@1x.webp"
-        width="720"
-        height="486"
-        alt="Modern city skyline with
-        architectural structures"
-      />
-    </picture>
   </div>
 </section>
 <footer class="bg-secondary-navy" aria-label="Site footer">
@@ -1098,6 +1059,6 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
     <!-- Main JavaScript -->
     <script src="./js/main.js"></script>
-    <script src="./js/site-admin-content.js?v=20260516-7"></script>
+    <script src="./js/site-admin-content.js?v=20260516-9"></script>
   </body>
 </html>

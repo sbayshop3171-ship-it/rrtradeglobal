@@ -221,6 +221,33 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
+      const submitLabelNode =
+        btnSubmit && btnSubmit.querySelector('#contact-form-button-text');
+      const defaultSubmitText = submitLabelNode
+        ? submitLabelNode.textContent.trim()
+        : 'Send Message';
+      const projectTypeField = form.querySelector('#projectType');
+      const selectedProjectTypeLabel =
+        projectTypeField && projectTypeField.selectedOptions && projectTypeField.selectedOptions[0]
+          ? projectTypeField.selectedOptions[0].textContent.trim()
+          : '';
+
+      const adminApi = window.BricknetAdminContent;
+      if (adminApi && typeof adminApi.saveContactMessage === 'function') {
+        try {
+          adminApi.saveContactMessage({
+            fullName: formData.get('fullName'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            projectType: selectedProjectTypeLabel || formData.get('projectType'),
+            message: formData.get('message'),
+            pageUrl: window.location.pathname,
+          });
+        } catch (error) {
+          // Keep form submission flow running even if local save fails.
+        }
+      }
+
       btnSubmit.disabled = true;
       btnSubmit.innerHTML =
         'Sending... <i class="ph ph-spinner text-xl animate-spin" aria-hidden="true"></i>';
@@ -255,7 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           btnSubmit.disabled = false;
           btnSubmit.innerHTML =
-            'Send Message <i class="ph ph-arrow-right text-xl" aria-hidden="true"></i>';
+            defaultSubmitText +
+            ' <i class="ph ph-arrow-right text-xl" aria-hidden="true"></i>';
           Toastify({
             text: 'Oops! Something went wrong. Please try again.',
             duration: 5000,
@@ -271,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         btnSubmit.disabled = false;
         btnSubmit.innerHTML =
-          'Send Message <i class="ph ph-arrow-right text-xl" aria-hidden="true"></i>';
+          defaultSubmitText + ' <i class="ph ph-arrow-right text-xl" aria-hidden="true"></i>';
         Toastify({
           text: 'There was an error submitting the form.',
           duration: 5000,

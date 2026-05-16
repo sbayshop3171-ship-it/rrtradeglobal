@@ -2,8 +2,23 @@
   var STORAGE_KEY = 'bricknet_admin_content_v2';
   var COOKIE_KEY = 'bricknet_admin_content_v2_cookie';
   var SESSION_KEY = 'bricknet_admin_session_v1';
+  var CONTACT_MESSAGES_KEY = 'bricknet_contact_messages_v1';
+  var CONTACT_MESSAGES_COOKIE_KEY = 'bricknet_contact_messages_v1_cookie';
+  var REMOTE_CONTENT_ENDPOINT = resolveRemoteContentEndpoint();
+  var remoteContentSyncPromise = null;
 
   var CORE_VALUES_VERSION = 'v2';
+
+  function resolveRemoteContentEndpoint() {
+    var path =
+      typeof window !== 'undefined' && window.location && window.location.pathname
+        ? window.location.pathname
+        : '';
+    if (path.indexOf('/admin/') !== -1) {
+      return '../api/site-content.php';
+    }
+    return 'api/site-content.php';
+  }
 
   var DEFAULT_CONTENT = {
     siteName: 'Bricknet',
@@ -20,6 +35,74 @@
     heroDescription:
       'We offer reliable construction services with a focus on unmatched quality, ensuring projects are completed on time and within budget.',
     heroBackgroundUrl: 'images/hero-01@1x.webp',
+    contactHeroLabel: 'Our Contact',
+    contactHeroTitle: 'Let\u2019s Talk About Your Project',
+    contactHeroDescription:
+      "Whether you're planning, building, or renovating, we're here to help. Reach out today and let's build something exceptional together.",
+    contactDetailsLabel: 'Contact Details',
+    contactDetailsTitle: "Let's Work Together",
+    contactDetailsDescription:
+      "Whether you have a question, need more details about our services, or want to discuss a potential collaboration, we're here to help.",
+    contactMessageLabel: 'Message Us',
+    contactMessageValue: 'contact@bricknetbuilds.com',
+    contactCallLabel: 'Call Us',
+    contactCallValue: '(555) 483-2190',
+    contactLocationLabel: 'Location',
+    contactLocationValue: '82 Westfield Industrial Blvd, San Diego, CA 92101',
+    contactHoursLabel: 'Business Hours',
+    contactHoursLine1: 'Monday - Friday, 8:00 AM - 6:00 PM',
+    contactHoursLine2: 'Saturday: 9:00 AM - 2:00 PM',
+    contactHoursLine3: 'Sunday: Closed',
+    contactFormTitle: 'Send Us Message!',
+    contactFormLabelFullName: 'Full Name*',
+    contactFormLabelEmail: 'Email Address*',
+    contactFormLabelPhone: 'Phone Number*',
+    contactFormLabelProjectType: 'Project Type*',
+    contactFormLabelMessage: 'Message*',
+    contactFormPlaceholderFullName: 'Your name',
+    contactFormPlaceholderEmail: 'Your email',
+    contactFormPlaceholderPhone: 'Your phone number',
+    contactFormPlaceholderMessage: 'Tell us about your project...',
+    contactFormProjectTypePlaceholder: 'Select project type',
+    contactFormButtonText: 'Send Message',
+    contactFormProjectTypeOptions: [
+      { label: 'Residential Construction', value: 'residential' },
+      { label: 'Commercial Construction', value: 'commercial' },
+      { label: 'Renovation', value: 'renovation' },
+      { label: 'Consultation', value: 'consultation' },
+      { label: 'Other', value: 'other' },
+    ],
+    contactFaqLabel: 'FAQs',
+    contactFaqTitle: 'Need Help Before You Build?',
+    contactFaqDescription:
+      'Find quick answers to the most common inquiries from new and returning clients',
+    contactFaqItems: [
+      {
+        question: 'What areas do you serve?',
+        answer:
+          "We primarily serve clients across California, but we're open to select projects in neighboring states based on scope and timeline.",
+      },
+      {
+        question: 'How early should I contact you for a new project?',
+        answer:
+          "It's best to contact us as early as possible so we can align planning, budgeting, and timelines before work begins.",
+      },
+      {
+        question: 'Do you offer free consultations?',
+        answer:
+          'Yes. We offer an initial consultation to understand your project goals and recommend the best next steps.',
+      },
+      {
+        question: 'Can you help with permits and documentation?',
+        answer:
+          'Yes. We guide clients through permits, compliance checks, and required documentation throughout the project.',
+      },
+      {
+        question: 'Do you work with custom designs or only in-house plans?',
+        answer:
+          'We work with both. You can bring your custom design, or we can help create a tailored in-house solution.',
+      },
+    ],
     servicesLabel: 'OUR EXPERTISE',
     servicesTitle: 'We Supply Everything Your Factory Needs',
     servicesDescription:
@@ -340,6 +423,37 @@
     };
   }
 
+  function cleanContactFaqItem(item, index, fallbackItems) {
+    var fallback =
+      (fallbackItems && fallbackItems[index]) || DEFAULT_CONTENT.contactFaqItems[index] || {
+        question: 'FAQ question',
+        answer: 'FAQ answer',
+      };
+
+    return {
+      question: cleanString(item && item.question, fallback.question),
+      answer: cleanString(item && item.answer, fallback.answer),
+    };
+  }
+
+  function cleanContactProjectTypeOption(item, index, fallbackItems) {
+    var fallback =
+      (fallbackItems && fallbackItems[index]) ||
+      DEFAULT_CONTENT.contactFormProjectTypeOptions[index] || {
+        label: 'Option ' + (index + 1),
+        value: 'option-' + (index + 1),
+      };
+
+    var label = cleanString(item && item.label, fallback.label);
+    var rawValue = cleanString(item && item.value, fallback.value).toLowerCase();
+    var safeValue = rawValue.replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
+
+    return {
+      label: label,
+      value: safeValue || fallback.value,
+    };
+  }
+
   function sanitizeList(list, fallbackList, cleaner, maxItems) {
     var defaultList = Array.isArray(fallbackList) && fallbackList.length ? fallbackList : [];
     var source = Array.isArray(list) && list.length ? list : defaultList;
@@ -399,6 +513,109 @@
       heroBackgroundUrl: cleanString(
         content && content.heroBackgroundUrl,
         fallback.heroBackgroundUrl
+      ),
+      contactHeroLabel: cleanString(content && content.contactHeroLabel, fallback.contactHeroLabel),
+      contactHeroTitle: cleanString(content && content.contactHeroTitle, fallback.contactHeroTitle),
+      contactHeroDescription: cleanString(
+        content && content.contactHeroDescription,
+        fallback.contactHeroDescription
+      ),
+      contactDetailsLabel: cleanString(
+        content && content.contactDetailsLabel,
+        fallback.contactDetailsLabel
+      ),
+      contactDetailsTitle: cleanString(
+        content && content.contactDetailsTitle,
+        fallback.contactDetailsTitle
+      ),
+      contactDetailsDescription: cleanString(
+        content && content.contactDetailsDescription,
+        fallback.contactDetailsDescription
+      ),
+      contactMessageLabel: cleanString(
+        content && content.contactMessageLabel,
+        fallback.contactMessageLabel
+      ),
+      contactMessageValue: cleanString(
+        content && content.contactMessageValue,
+        fallback.contactMessageValue
+      ),
+      contactCallLabel: cleanString(content && content.contactCallLabel, fallback.contactCallLabel),
+      contactCallValue: cleanString(content && content.contactCallValue, fallback.contactCallValue),
+      contactLocationLabel: cleanString(
+        content && content.contactLocationLabel,
+        fallback.contactLocationLabel
+      ),
+      contactLocationValue: cleanString(
+        content && content.contactLocationValue,
+        fallback.contactLocationValue
+      ),
+      contactHoursLabel: cleanString(content && content.contactHoursLabel, fallback.contactHoursLabel),
+      contactHoursLine1: cleanString(content && content.contactHoursLine1, fallback.contactHoursLine1),
+      contactHoursLine2: cleanString(content && content.contactHoursLine2, fallback.contactHoursLine2),
+      contactHoursLine3: cleanString(content && content.contactHoursLine3, fallback.contactHoursLine3),
+      contactFormTitle: cleanString(content && content.contactFormTitle, fallback.contactFormTitle),
+      contactFormLabelFullName: cleanString(
+        content && content.contactFormLabelFullName,
+        fallback.contactFormLabelFullName
+      ),
+      contactFormLabelEmail: cleanString(
+        content && content.contactFormLabelEmail,
+        fallback.contactFormLabelEmail
+      ),
+      contactFormLabelPhone: cleanString(
+        content && content.contactFormLabelPhone,
+        fallback.contactFormLabelPhone
+      ),
+      contactFormLabelProjectType: cleanString(
+        content && content.contactFormLabelProjectType,
+        fallback.contactFormLabelProjectType
+      ),
+      contactFormLabelMessage: cleanString(
+        content && content.contactFormLabelMessage,
+        fallback.contactFormLabelMessage
+      ),
+      contactFormPlaceholderFullName: cleanString(
+        content && content.contactFormPlaceholderFullName,
+        fallback.contactFormPlaceholderFullName
+      ),
+      contactFormPlaceholderEmail: cleanString(
+        content && content.contactFormPlaceholderEmail,
+        fallback.contactFormPlaceholderEmail
+      ),
+      contactFormPlaceholderPhone: cleanString(
+        content && content.contactFormPlaceholderPhone,
+        fallback.contactFormPlaceholderPhone
+      ),
+      contactFormPlaceholderMessage: cleanString(
+        content && content.contactFormPlaceholderMessage,
+        fallback.contactFormPlaceholderMessage
+      ),
+      contactFormProjectTypePlaceholder: cleanString(
+        content && content.contactFormProjectTypePlaceholder,
+        fallback.contactFormProjectTypePlaceholder
+      ),
+      contactFormButtonText: cleanString(
+        content && content.contactFormButtonText,
+        fallback.contactFormButtonText
+      ),
+      contactFormProjectTypeOptions: sanitizeList(
+        content && content.contactFormProjectTypeOptions,
+        fallback.contactFormProjectTypeOptions,
+        cleanContactProjectTypeOption,
+        20
+      ),
+      contactFaqLabel: cleanString(content && content.contactFaqLabel, fallback.contactFaqLabel),
+      contactFaqTitle: cleanString(content && content.contactFaqTitle, fallback.contactFaqTitle),
+      contactFaqDescription: cleanString(
+        content && content.contactFaqDescription,
+        fallback.contactFaqDescription
+      ),
+      contactFaqItems: sanitizeList(
+        content && content.contactFaqItems,
+        fallback.contactFaqItems,
+        cleanContactFaqItem,
+        20
       ),
       servicesLabel: cleanString(content && content.servicesLabel, fallback.servicesLabel),
       servicesTitle: cleanString(content && content.servicesTitle, fallback.servicesTitle),
@@ -477,6 +694,122 @@
     return safe;
   }
 
+  function parseRemoteContentPayload(payload) {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      return null;
+    }
+
+    if (payload.content && typeof payload.content === 'object' && !Array.isArray(payload.content)) {
+      return payload.content;
+    }
+
+    return payload;
+  }
+
+  function fetchRemoteContent() {
+    if (typeof window.fetch !== 'function') {
+      return Promise.resolve(null);
+    }
+
+    return window
+      .fetch(REMOTE_CONTENT_ENDPOINT, {
+        method: 'GET',
+        cache: 'no-store',
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+        return response
+          .json()
+          .then(function (payload) {
+            return parseRemoteContentPayload(payload);
+          })
+          .catch(function () {
+            return null;
+          });
+      })
+      .then(function (source) {
+        if (!source) {
+          return null;
+        }
+        return sanitizeContent(source);
+      })
+      .catch(function () {
+        return null;
+      });
+  }
+
+  function pushRemoteContent(content) {
+    if (typeof window.fetch !== 'function') {
+      return Promise.resolve(false);
+    }
+
+    return window
+      .fetch(REMOTE_CONTENT_ENDPOINT, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: content }),
+      })
+      .then(function (response) {
+        return response.ok;
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
+  function emitContentUpdated(content) {
+    if (!window || typeof window.dispatchEvent !== 'function') {
+      return;
+    }
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent('bricknet-content-updated', {
+          detail: clone(content),
+        })
+      );
+    } catch (error) {
+      // CustomEvent may be unavailable in old browsers.
+    }
+  }
+
+  function syncRemoteContent() {
+    if (remoteContentSyncPromise) {
+      return remoteContentSyncPromise;
+    }
+
+    remoteContentSyncPromise = fetchRemoteContent()
+      .then(function (remoteContent) {
+        if (!remoteContent) {
+          return null;
+        }
+
+        var localRaw = readStoredRaw();
+        var remoteRaw = JSON.stringify(remoteContent);
+        if (localRaw !== remoteRaw) {
+          writeStoredRaw(remoteRaw);
+        }
+
+        applyToHomepage(remoteContent);
+        applyToContactPage(remoteContent);
+        emitContentUpdated(remoteContent);
+        return remoteContent;
+      })
+      .finally(function () {
+        remoteContentSyncPromise = null;
+      });
+
+    return remoteContentSyncPromise;
+  }
+
   function loadContent() {
     try {
       var raw = readStoredRaw();
@@ -497,12 +830,39 @@
   function saveContent(content) {
     var sanitized = sanitizeContent(content);
     writeStoredRaw(JSON.stringify(sanitized));
+    pushRemoteContent(sanitized);
     return sanitized;
   }
 
+  function saveContentWithStatus(content) {
+    var sanitized = sanitizeContent(content);
+    writeStoredRaw(JSON.stringify(sanitized));
+    return pushRemoteContent(sanitized).then(function (remoteSaved) {
+      return {
+        content: sanitized,
+        remoteSaved: remoteSaved,
+      };
+    });
+  }
+
   function resetContent() {
+    var defaults = clone(DEFAULT_CONTENT);
     clearStoredRaw();
-    return clone(DEFAULT_CONTENT);
+    writeStoredRaw(JSON.stringify(defaults));
+    pushRemoteContent(defaults);
+    return defaults;
+  }
+
+  function resetContentWithStatus() {
+    var defaults = clone(DEFAULT_CONTENT);
+    clearStoredRaw();
+    writeStoredRaw(JSON.stringify(defaults));
+    return pushRemoteContent(defaults).then(function (remoteSaved) {
+      return {
+        content: defaults,
+        remoteSaved: remoteSaved,
+      };
+    });
   }
 
   function readCookie(name) {
@@ -568,6 +928,101 @@
       // ignore
     }
     clearCookie(COOKIE_KEY);
+  }
+
+  function readContactMessagesRaw() {
+    try {
+      var localRaw = localStorage.getItem(CONTACT_MESSAGES_KEY);
+      if (localRaw) {
+        return localRaw;
+      }
+    } catch (error) {
+      // localStorage may be blocked in some browsers/private modes.
+    }
+
+    var cookieRaw = readCookie(CONTACT_MESSAGES_COOKIE_KEY);
+    if (cookieRaw) {
+      return cookieRaw;
+    }
+
+    return '';
+  }
+
+  function writeContactMessagesRaw(raw) {
+    var localSaved = false;
+
+    try {
+      localStorage.setItem(CONTACT_MESSAGES_KEY, raw);
+      localSaved = true;
+    } catch (error) {
+      localSaved = false;
+    }
+
+    if (!localSaved) {
+      writeCookie(CONTACT_MESSAGES_COOKIE_KEY, raw);
+    }
+  }
+
+  function clearContactMessagesRaw() {
+    try {
+      localStorage.removeItem(CONTACT_MESSAGES_KEY);
+    } catch (error) {
+      // ignore
+    }
+    clearCookie(CONTACT_MESSAGES_COOKIE_KEY);
+  }
+
+  function loadContactMessages() {
+    try {
+      var raw = readContactMessagesRaw();
+      if (!raw) {
+        return [];
+      }
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+      return parsed;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveContactMessage(entry) {
+    var fullName = cleanString(entry && entry.fullName, 'Visitor');
+    var email = cleanString(entry && entry.email, '');
+    var phone = cleanString(entry && entry.phone, '');
+    var projectType = cleanString(entry && entry.projectType, '');
+    var message = cleanString(entry && entry.message, '');
+    var pageUrl = cleanString(entry && entry.pageUrl, '');
+
+    if (!email || !message) {
+      return false;
+    }
+
+    var messages = loadContactMessages();
+    var now = new Date();
+    messages.unshift({
+      id: String(now.getTime()) + '-' + Math.floor(Math.random() * 1000000),
+      createdAt: now.toISOString(),
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      projectType: projectType,
+      message: message,
+      pageUrl: pageUrl,
+    });
+
+    if (messages.length > 500) {
+      messages = messages.slice(0, 500);
+    }
+
+    writeContactMessagesRaw(JSON.stringify(messages));
+    return true;
+  }
+
+  function clearContactMessages() {
+    clearContactMessagesRaw();
   }
 
   function setText(id, value) {
@@ -1188,15 +1643,181 @@
     syncSwiper('#slider-testimonials');
   }
 
+  function setInputPlaceholder(selector, value) {
+    var field = document.querySelector(selector);
+    if (field) {
+      field.setAttribute('placeholder', value || '');
+    }
+  }
+
+  function renderContactProjectTypeOptions(content) {
+    var select = document.getElementById('projectType');
+    if (!select) {
+      return;
+    }
+
+    var previousValue = select.value;
+    select.innerHTML = '';
+
+    var placeholder = document.createElement('option');
+    placeholder.id = 'contact-form-project-type-placeholder';
+    placeholder.value = '';
+    placeholder.disabled = true;
+    placeholder.className = 'text-base-grey-stroke';
+    placeholder.textContent = content.contactFormProjectTypePlaceholder;
+    select.appendChild(placeholder);
+
+    (content.contactFormProjectTypeOptions || []).forEach(function (item) {
+      var option = document.createElement('option');
+      option.value = item.value;
+      option.textContent = item.label;
+      select.appendChild(option);
+    });
+
+    if (previousValue && select.querySelector("option[value='" + previousValue + "']")) {
+      select.value = previousValue;
+    } else {
+      placeholder.selected = true;
+      select.value = '';
+    }
+  }
+
+  function createContactFaqDetails(item, index) {
+    var details = document.createElement('details');
+    details.className =
+      'group mx-auto py-10 lg:p-10 last:border-b-0 border-b-[0.80px] border-base-grey-stroke w-full';
+    details.setAttribute('data-aos', 'fade-up');
+    details.setAttribute('data-aos-delay', String(index * 100).padStart(3, '0'));
+
+    var summary = document.createElement('summary');
+    summary.className =
+      'flex justify-between items-start lg:items-center gap-10 cursor-pointer list-none';
+
+    var summaryWrap = document.createElement('div');
+    summaryWrap.className =
+      'flex transition-opacity justify-start flex-col lg:flex-row items-start gap-10 lg:gap-[120px]';
+
+    var number = document.createElement('div');
+    number.className = 'w-10 text-primary-orange text-2xl font-medium capitalize leading-tight';
+    number.textContent = String(index + 1).padStart(2, '0');
+
+    var question = document.createElement('div');
+    question.className =
+      'flex-1 text-secondary-navy group-hover:text-base-black text-2xl font-medium leading-tight';
+    question.textContent = item.question;
+
+    summaryWrap.appendChild(number);
+    summaryWrap.appendChild(question);
+
+    var iconWrap = document.createElement('span');
+    iconWrap.className = 'size-10 flex justify-center items-center mt-1.5';
+
+    var icon = document.createElement('i');
+    icon.className =
+      'ph ph-caret-up text-3xl transition-all transform-gpu text-secondary-navy lg:text-secondary-light-navy duration-300 group-open:rotate-180 group-hover:text-primary-orange';
+    iconWrap.appendChild(icon);
+
+    summary.appendChild(summaryWrap);
+    summary.appendChild(iconWrap);
+
+    var answer = document.createElement('div');
+    answer.className =
+      'pl-0 lg:pl-[160px] pr-0 mt-6 text-base-grey text-lg font-normal leading-relaxed overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-open:max-h-[500px] group-open:opacity-100';
+    answer.textContent = item.answer;
+
+    details.appendChild(summary);
+    details.appendChild(answer);
+
+    return details;
+  }
+
+  function renderContactFaq(content) {
+    var list = document.getElementById('contact-faq-list');
+    if (!list) {
+      return;
+    }
+
+    list.innerHTML = '';
+    (content.contactFaqItems || []).forEach(function (item, index) {
+      list.appendChild(createContactFaqDetails(item, index));
+    });
+  }
+
+  function applyToContactPage(content) {
+    var isContactPage = Boolean(
+      document.getElementById('contact-hero-title') || document.getElementById('contact-faq-list')
+    );
+
+    if (!isContactPage || !content) {
+      return;
+    }
+
+    setText('contact-hero-label', content.contactHeroLabel);
+    setText('contact-hero-title', content.contactHeroTitle);
+    setText('contact-hero-description', content.contactHeroDescription);
+
+    setText('contact-details-label', content.contactDetailsLabel);
+    setText('contact-detail-title', content.contactDetailsTitle);
+    setText('contact-details-description', content.contactDetailsDescription);
+    setText('contact-message-label', content.contactMessageLabel);
+    setText('contact-message-value', content.contactMessageValue);
+    setText('contact-call-label', content.contactCallLabel);
+    setText('contact-call-value', content.contactCallValue);
+    setText('contact-location-label', content.contactLocationLabel);
+    setText('contact-location-value', content.contactLocationValue);
+    setText('contact-hours-label', content.contactHoursLabel);
+    setText('contact-hours-line-1', content.contactHoursLine1);
+    setText('contact-hours-line-2', content.contactHoursLine2);
+    setText('contact-hours-line-3', content.contactHoursLine3);
+
+    setText('contact-form-title', content.contactFormTitle);
+    setText('contact-form-label-full-name', content.contactFormLabelFullName);
+    setText('contact-form-label-email', content.contactFormLabelEmail);
+    setText('contact-form-label-phone', content.contactFormLabelPhone);
+    setText('contact-form-label-project-type', content.contactFormLabelProjectType);
+    setText('contact-form-label-message', content.contactFormLabelMessage);
+    setInputPlaceholder(
+      "input[data-role='contact-form-placeholder-full-name']",
+      content.contactFormPlaceholderFullName
+    );
+    setInputPlaceholder(
+      "input[data-role='contact-form-placeholder-email']",
+      content.contactFormPlaceholderEmail
+    );
+    setInputPlaceholder(
+      "input[data-role='contact-form-placeholder-phone']",
+      content.contactFormPlaceholderPhone
+    );
+    setInputPlaceholder(
+      "textarea[data-role='contact-form-placeholder-message']",
+      content.contactFormPlaceholderMessage
+    );
+    setText('contact-form-button-text', content.contactFormButtonText);
+    renderContactProjectTypeOptions(content);
+
+    setText('contact-faq-label', content.contactFaqLabel);
+    setText('faq-title', content.contactFaqTitle);
+    setText('contact-faq-description', content.contactFaqDescription);
+    renderContactFaq(content);
+
+    document.querySelectorAll("section[aria-labelledby='cta-title']").forEach(function (section) {
+      section.remove();
+    });
+  }
+
   function applyToHomepage(content) {
     if (!content) {
       return;
     }
 
-    setText('admin-short-title', content.shortTitle);
-    setText('hero-title', content.heroTitle);
-    setText('admin-hero-description', content.heroDescription);
-    setPictureImageById('hero-parallax', content.heroBackgroundUrl);
+    var isHomepageHero = Boolean(document.getElementById('admin-short-title'));
+    if (isHomepageHero) {
+      setText('admin-short-title', content.shortTitle);
+      setText('hero-title', content.heroTitle);
+      setText('admin-hero-description', content.heroDescription);
+      setPictureImageById('hero-parallax', content.heroBackgroundUrl);
+    }
+
     toggleProjectsNavItem(content.showProjectsNavItem);
     setText('about-title-text', content.aboutTitle);
     setLink('about-cta-link', content.aboutCtaText, content.aboutCtaUrl);
@@ -1223,12 +1844,23 @@
   window.BricknetAdminContent = {
     STORAGE_KEY: STORAGE_KEY,
     SESSION_KEY: SESSION_KEY,
+    CONTACT_MESSAGES_KEY: CONTACT_MESSAGES_KEY,
     DEFAULT_CONTENT: clone(DEFAULT_CONTENT),
     loadContent: loadContent,
     saveContent: saveContent,
+    saveContentWithStatus: saveContentWithStatus,
     resetContent: resetContent,
+    resetContentWithStatus: resetContentWithStatus,
+    syncRemoteContent: syncRemoteContent,
     applyToHomepage: applyToHomepage,
+    applyToContactPage: applyToContactPage,
+    loadContactMessages: loadContactMessages,
+    saveContactMessage: saveContactMessage,
+    clearContactMessages: clearContactMessages,
   };
 
-  applyToHomepage(loadContent());
+  var content = loadContent();
+  applyToHomepage(content);
+  applyToContactPage(content);
+  syncRemoteContent();
 })();

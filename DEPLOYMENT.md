@@ -18,6 +18,31 @@ sudo chown -R $USER:$USER /var/www/rrtradeglobal
 
 If you use shared hosting/cPanel, use your real web root path (for example `public_html`).
 
+### Required for Global Admin Content Sync
+
+This project now uses `api/site-content.php` to store admin content globally for all users.
+
+- Your hosting must support PHP.
+- The `storage/` folder inside the deployed site must be writable by PHP.
+
+Example:
+
+```bash
+cd /var/www/rrtradeglobal
+mkdir -p storage
+chmod 775 storage
+```
+
+Quick check after deploy:
+
+```bash
+curl https://your-domain.com/api/site-content.php
+```
+
+You should get JSON like:
+
+`{"success":true,"content":null}`
+
 ## 2. Create Deploy SSH Key
 
 Run on your local machine:
@@ -76,4 +101,3 @@ Then check:
 
 - Files are synced with `rsync --delete`, so removed files in git will also be removed from server.
 - Keep `DEPLOY_SSH_KEY` secret private.
-

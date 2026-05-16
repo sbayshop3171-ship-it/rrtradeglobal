@@ -314,6 +314,31 @@
         border-top: 1px solid var(--line);
       }
 
+      .message-card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fcfdff;
+        padding: 0.75rem;
+        margin-bottom: 0.65rem;
+      }
+
+      .message-meta {
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin: 0 0 0.4rem;
+      }
+
+      .message-title {
+        margin: 0 0 0.45rem;
+        font-size: 0.96rem;
+      }
+
+      .message-body {
+        margin: 0;
+        white-space: pre-wrap;
+        color: var(--ink);
+      }
+
       @media (max-width: 980px) {
         .shell {
           grid-template-columns: 1fr;
@@ -387,6 +412,8 @@
               <button class="nav-btn" type="button" data-section="projects">Featured Projects</button>
               <button class="nav-btn" type="button" data-section="work">How We Work</button>
               <button class="nav-btn" type="button" data-section="testimonials">Testimonials</button>
+              <button class="nav-btn" type="button" data-section="contact">Contact Page</button>
+              <button class="nav-btn" type="button" data-section="messages">Contact Messages</button>
               <button class="nav-btn" type="button" data-section="brands">Brands</button>
             </div>
 
@@ -551,7 +578,7 @@
                 <button class="btn btn-ghost" id="addServiceBtn" type="button">+ Add Service</button>
               </div>
               <p class="hint">
-                Image URL দিন, অথবা file upload করুন। Upload করা image browser localStorage-এ save হবে।
+                Image URL দিন, অথবা file upload করুন। Save দিলে data live server-এ sync হবে।
               </p>
             </section>
 
@@ -645,6 +672,176 @@
               </div>
             </section>
 
+            <section class="section" id="section-contact">
+              <h2>Contact Page</h2>
+              <p>Contact page hero, contact details, form labels/options এবং FAQ edit করুন।</p>
+
+              <h3 style="margin: 0.3rem 0 0.45rem;">Hero Block</h3>
+              <div class="grid grid-2">
+                <label>
+                  Hero Label (e.g. Our Contact)
+                  <input id="contactHeroLabel" type="text" />
+                </label>
+                <label class="span-2">
+                  Hero Title
+                  <textarea id="contactHeroTitle"></textarea>
+                </label>
+                <label class="span-2">
+                  Hero Description
+                  <textarea id="contactHeroDescription"></textarea>
+                </label>
+              </div>
+
+              <h3 style="margin: 1rem 0 0.45rem;">Contact Details Block</h3>
+              <div class="grid grid-2">
+                <label>
+                  Details Label
+                  <input id="contactDetailsLabel" type="text" />
+                </label>
+                <label class="span-2">
+                  Details Title
+                  <input id="contactDetailsTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  Details Description
+                  <textarea id="contactDetailsDescription"></textarea>
+                </label>
+                <label>
+                  Message Label
+                  <input id="contactMessageLabel" type="text" />
+                </label>
+                <label>
+                  Message Value
+                  <input id="contactMessageValue" type="text" />
+                </label>
+                <label>
+                  Call Label
+                  <input id="contactCallLabel" type="text" />
+                </label>
+                <label>
+                  Call Value
+                  <input id="contactCallValue" type="text" />
+                </label>
+                <label>
+                  Location Label
+                  <input id="contactLocationLabel" type="text" />
+                </label>
+                <label class="span-2">
+                  Location Value
+                  <input id="contactLocationValue" type="text" />
+                </label>
+                <label>
+                  Hours Label
+                  <input id="contactHoursLabel" type="text" />
+                </label>
+                <label>
+                  Hours Line 1
+                  <input id="contactHoursLine1" type="text" />
+                </label>
+                <label>
+                  Hours Line 2
+                  <input id="contactHoursLine2" type="text" />
+                </label>
+                <label>
+                  Hours Line 3
+                  <input id="contactHoursLine3" type="text" />
+                </label>
+              </div>
+
+              <h3 style="margin: 1rem 0 0.45rem;">Contact Form Block</h3>
+              <div class="grid grid-2">
+                <label>
+                  Form Title
+                  <input id="contactFormTitle" type="text" />
+                </label>
+                <label>
+                  Submit Button Text
+                  <input id="contactFormButtonText" type="text" />
+                </label>
+                <label>
+                  Full Name Label
+                  <input id="contactFormLabelFullName" type="text" />
+                </label>
+                <label>
+                  Full Name Placeholder
+                  <input id="contactFormPlaceholderFullName" type="text" />
+                </label>
+                <label>
+                  Email Label
+                  <input id="contactFormLabelEmail" type="text" />
+                </label>
+                <label>
+                  Email Placeholder
+                  <input id="contactFormPlaceholderEmail" type="text" />
+                </label>
+                <label>
+                  Phone Label
+                  <input id="contactFormLabelPhone" type="text" />
+                </label>
+                <label>
+                  Phone Placeholder
+                  <input id="contactFormPlaceholderPhone" type="text" />
+                </label>
+                <label>
+                  Project Type Label
+                  <input id="contactFormLabelProjectType" type="text" />
+                </label>
+                <label>
+                  Project Type Placeholder
+                  <input id="contactFormProjectTypePlaceholder" type="text" />
+                </label>
+                <label>
+                  Message Label
+                  <input id="contactFormLabelMessage" type="text" />
+                </label>
+                <label>
+                  Message Placeholder
+                  <input id="contactFormPlaceholderMessage" type="text" />
+                </label>
+              </div>
+
+              <h3 style="margin: 1rem 0 0.45rem;">Project Type Options</h3>
+              <div id="contactProjectTypeRows"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addContactProjectTypeBtn" type="button">
+                  + Add Project Type
+                </button>
+              </div>
+
+              <h3 style="margin: 1rem 0 0.45rem;">FAQ Block</h3>
+              <div class="grid grid-2">
+                <label>
+                  FAQ Label
+                  <input id="contactFaqLabel" type="text" />
+                </label>
+                <label>
+                  FAQ Title
+                  <input id="contactFaqTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  FAQ Description
+                  <textarea id="contactFaqDescription"></textarea>
+                </label>
+              </div>
+              <div id="contactFaqRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addContactFaqBtn" type="button">
+                  + Add FAQ
+                </button>
+              </div>
+            </section>
+
+            <section class="section" id="section-messages">
+              <h2>Contact Messages</h2>
+              <p>Contact form submit করলে user data এখানে save হয়ে দেখা যাবে।</p>
+              <div class="actions" style="margin-bottom: 0.55rem;">
+                <button class="btn btn-danger" id="clearContactMessagesBtn" type="button">
+                  Clear All Messages
+                </button>
+              </div>
+              <div id="contactMessageRows"></div>
+            </section>
+
             <section class="section" id="section-brands">
               <h2>Brand List</h2>
               <p>Brand Name / Logo URL / Link</p>
@@ -658,12 +855,12 @@
         </div>
 
         <p class="warn" style="margin-top: 0.7rem;">
-          Security note: This is a static local admin panel (client-side only), not a production-grade secure authentication system.
+          Security note: This admin login is still client-side only and not production-grade secure.
         </p>
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-7"></script>
+    <script src="/js/site-admin-content.js?v=20260516-9"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -682,6 +879,9 @@
         var projectRows = document.getElementById('projectRows');
         var workRows = document.getElementById('workRows');
         var testimonialRows = document.getElementById('testimonialRows');
+        var contactProjectTypeRows = document.getElementById('contactProjectTypeRows');
+        var contactFaqRows = document.getElementById('contactFaqRows');
+        var contactMessageRows = document.getElementById('contactMessageRows');
         var currentContent = api.loadContent();
 
         var navButtons = Array.from(document.querySelectorAll('.nav-btn'));
@@ -695,6 +895,8 @@
           projects: document.getElementById('section-projects'),
           work: document.getElementById('section-work'),
           testimonials: document.getElementById('section-testimonials'),
+          contact: document.getElementById('section-contact'),
+          messages: document.getElementById('section-messages'),
           brands: document.getElementById('section-brands'),
         };
 
@@ -724,6 +926,39 @@
           testimonialsLabel: document.getElementById('testimonialsLabel'),
           testimonialsTitle: document.getElementById('testimonialsTitle'),
           testimonialsDescription: document.getElementById('testimonialsDescription'),
+          contactHeroLabel: document.getElementById('contactHeroLabel'),
+          contactHeroTitle: document.getElementById('contactHeroTitle'),
+          contactHeroDescription: document.getElementById('contactHeroDescription'),
+          contactDetailsLabel: document.getElementById('contactDetailsLabel'),
+          contactDetailsTitle: document.getElementById('contactDetailsTitle'),
+          contactDetailsDescription: document.getElementById('contactDetailsDescription'),
+          contactMessageLabel: document.getElementById('contactMessageLabel'),
+          contactMessageValue: document.getElementById('contactMessageValue'),
+          contactCallLabel: document.getElementById('contactCallLabel'),
+          contactCallValue: document.getElementById('contactCallValue'),
+          contactLocationLabel: document.getElementById('contactLocationLabel'),
+          contactLocationValue: document.getElementById('contactLocationValue'),
+          contactHoursLabel: document.getElementById('contactHoursLabel'),
+          contactHoursLine1: document.getElementById('contactHoursLine1'),
+          contactHoursLine2: document.getElementById('contactHoursLine2'),
+          contactHoursLine3: document.getElementById('contactHoursLine3'),
+          contactFormTitle: document.getElementById('contactFormTitle'),
+          contactFormButtonText: document.getElementById('contactFormButtonText'),
+          contactFormLabelFullName: document.getElementById('contactFormLabelFullName'),
+          contactFormPlaceholderFullName: document.getElementById('contactFormPlaceholderFullName'),
+          contactFormLabelEmail: document.getElementById('contactFormLabelEmail'),
+          contactFormPlaceholderEmail: document.getElementById('contactFormPlaceholderEmail'),
+          contactFormLabelPhone: document.getElementById('contactFormLabelPhone'),
+          contactFormPlaceholderPhone: document.getElementById('contactFormPlaceholderPhone'),
+          contactFormLabelProjectType: document.getElementById('contactFormLabelProjectType'),
+          contactFormProjectTypePlaceholder: document.getElementById(
+            'contactFormProjectTypePlaceholder'
+          ),
+          contactFormLabelMessage: document.getElementById('contactFormLabelMessage'),
+          contactFormPlaceholderMessage: document.getElementById('contactFormPlaceholderMessage'),
+          contactFaqLabel: document.getElementById('contactFaqLabel'),
+          contactFaqTitle: document.getElementById('contactFaqTitle'),
+          contactFaqDescription: document.getElementById('contactFaqDescription'),
         };
 
         function padNumber(value) {
@@ -938,10 +1173,30 @@
             panelView.classList.remove('hide');
             loadIntoForm();
             activateSection('general');
+            syncFromLiveContent();
           } else {
             loginView.classList.remove('hide');
             panelView.classList.add('hide');
           }
+        }
+
+        function syncFromLiveContent() {
+          if (!api || typeof api.syncRemoteContent !== 'function') {
+            return;
+          }
+
+          api
+            .syncRemoteContent()
+            .then(function (remoteContent) {
+              if (!remoteContent) {
+                return;
+              }
+              loadIntoForm();
+              setStatus('Latest live content synced.', false);
+            })
+            .catch(function () {
+              setStatus('Live sync failed. Check /api/site-content.php availability.', true);
+            });
         }
 
         function createBrandRow(brand) {
@@ -1284,6 +1539,115 @@
           refreshTestimonialNumbers();
         }
 
+        function createContactProjectTypeRow(item, index) {
+          var shell = createRowShell('Project Type #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshContactProjectTypeNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Label', 'label', item && item.label, { full: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Value (slug)', 'value', item && item.value, { full: true })
+          );
+
+          return shell.row;
+        }
+
+        function refreshContactProjectTypeNumbers() {
+          refreshNumbers(contactProjectTypeRows, 'Project Type');
+        }
+
+        function renderContactProjectTypeRows(items) {
+          contactProjectTypeRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            contactProjectTypeRows.appendChild(createContactProjectTypeRow(item, index));
+          });
+          refreshContactProjectTypeNumbers();
+        }
+
+        function createContactFaqRow(item, index) {
+          var shell = createRowShell('FAQ #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshContactFaqNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Question', 'question', item && item.question, { full: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Answer', 'answer', item && item.answer, {
+              full: true,
+              textarea: true,
+            })
+          );
+
+          return shell.row;
+        }
+
+        function refreshContactFaqNumbers() {
+          refreshNumbers(contactFaqRows, 'FAQ');
+        }
+
+        function renderContactFaqRows(items) {
+          contactFaqRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            contactFaqRows.appendChild(createContactFaqRow(item, index));
+          });
+          refreshContactFaqNumbers();
+        }
+
+        function renderContactMessages() {
+          if (!contactMessageRows) {
+            return;
+          }
+
+          var messages = [];
+          if (api && typeof api.loadContactMessages === 'function') {
+            messages = api.loadContactMessages();
+          }
+
+          contactMessageRows.innerHTML = '';
+
+          if (!messages.length) {
+            var empty = document.createElement('p');
+            empty.className = 'hint';
+            empty.textContent = 'No saved messages yet.';
+            contactMessageRows.appendChild(empty);
+            return;
+          }
+
+          messages.forEach(function (entry, index) {
+            var card = document.createElement('article');
+            card.className = 'message-card';
+
+            var title = document.createElement('h3');
+            title.className = 'message-title';
+            title.textContent =
+              '#' + padNumber(index + 1) + ' - ' + (entry.fullName || 'Visitor') + ' (' + (entry.email || '-') + ')';
+
+            var meta = document.createElement('p');
+            meta.className = 'message-meta';
+            meta.textContent =
+              'Phone: ' +
+              (entry.phone || '-') +
+              ' | Project: ' +
+              (entry.projectType || '-') +
+              ' | Time: ' +
+              (entry.createdAt ? new Date(entry.createdAt).toLocaleString() : '-');
+
+            var body = document.createElement('p');
+            body.className = 'message-body';
+            body.textContent = entry.message || '';
+
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(body);
+            contactMessageRows.appendChild(card);
+          });
+        }
+
         function loadIntoForm() {
           var content = api.loadContent();
           currentContent = content;
@@ -1312,12 +1676,49 @@
           fields.testimonialsLabel.value = content.testimonialsLabel || '';
           fields.testimonialsTitle.value = content.testimonialsTitle || '';
           fields.testimonialsDescription.value = content.testimonialsDescription || '';
+          fields.contactHeroLabel.value = content.contactHeroLabel || '';
+          fields.contactHeroTitle.value = content.contactHeroTitle || '';
+          fields.contactHeroDescription.value = content.contactHeroDescription || '';
+          fields.contactDetailsLabel.value = content.contactDetailsLabel || '';
+          fields.contactDetailsTitle.value = content.contactDetailsTitle || '';
+          fields.contactDetailsDescription.value = content.contactDetailsDescription || '';
+          fields.contactMessageLabel.value = content.contactMessageLabel || '';
+          fields.contactMessageValue.value = content.contactMessageValue || '';
+          fields.contactCallLabel.value = content.contactCallLabel || '';
+          fields.contactCallValue.value = content.contactCallValue || '';
+          fields.contactLocationLabel.value = content.contactLocationLabel || '';
+          fields.contactLocationValue.value = content.contactLocationValue || '';
+          fields.contactHoursLabel.value = content.contactHoursLabel || '';
+          fields.contactHoursLine1.value = content.contactHoursLine1 || '';
+          fields.contactHoursLine2.value = content.contactHoursLine2 || '';
+          fields.contactHoursLine3.value = content.contactHoursLine3 || '';
+          fields.contactFormTitle.value = content.contactFormTitle || '';
+          fields.contactFormButtonText.value = content.contactFormButtonText || '';
+          fields.contactFormLabelFullName.value = content.contactFormLabelFullName || '';
+          fields.contactFormPlaceholderFullName.value =
+            content.contactFormPlaceholderFullName || '';
+          fields.contactFormLabelEmail.value = content.contactFormLabelEmail || '';
+          fields.contactFormPlaceholderEmail.value = content.contactFormPlaceholderEmail || '';
+          fields.contactFormLabelPhone.value = content.contactFormLabelPhone || '';
+          fields.contactFormPlaceholderPhone.value = content.contactFormPlaceholderPhone || '';
+          fields.contactFormLabelProjectType.value = content.contactFormLabelProjectType || '';
+          fields.contactFormProjectTypePlaceholder.value =
+            content.contactFormProjectTypePlaceholder || '';
+          fields.contactFormLabelMessage.value = content.contactFormLabelMessage || '';
+          fields.contactFormPlaceholderMessage.value =
+            content.contactFormPlaceholderMessage || '';
+          fields.contactFaqLabel.value = content.contactFaqLabel || '';
+          fields.contactFaqTitle.value = content.contactFaqTitle || '';
+          fields.contactFaqDescription.value = content.contactFaqDescription || '';
           renderServiceRows(content.services || []);
           renderValueRows(content.valuesItems || []);
           renderProjectRows(content.featuredProjects || []);
           renderWorkRows(content.workProcessSteps || []);
           renderTestimonialRows(content.testimonials || []);
+          renderContactProjectTypeRows(content.contactFormProjectTypeOptions || []);
+          renderContactFaqRows(content.contactFaqItems || []);
           renderBrandRows(content.brands || []);
+          renderContactMessages();
           refreshAllStaticImagePreviews();
           setStatus('', false);
         }
@@ -1329,6 +1730,10 @@
           var projectBlocks = Array.from(projectRows.querySelectorAll('.service-row'));
           var workStepBlocks = Array.from(workRows.querySelectorAll('.service-row'));
           var testimonialBlocks = Array.from(testimonialRows.querySelectorAll('.service-row'));
+          var contactProjectTypeBlocks = Array.from(
+            contactProjectTypeRows.querySelectorAll('.service-row')
+          );
+          var contactFaqBlocks = Array.from(contactFaqRows.querySelectorAll('.service-row'));
 
           function readInput(row, fieldName) {
             var field = row.querySelector("[data-field='" + fieldName + "']");
@@ -1459,6 +1864,41 @@
             .filter(Boolean)
             .slice(0, 12);
 
+          var contactFormProjectTypeOptions = contactProjectTypeBlocks
+            .map(function (row) {
+              var label = readInput(row, 'label');
+              var value = readInput(row, 'value').toLowerCase();
+              var safeValue = value.replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
+
+              if (!label) {
+                return null;
+              }
+
+              return {
+                label: label,
+                value: safeValue || label.toLowerCase().replace(/[^a-z0-9-]+/g, '-'),
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 20);
+
+          var contactFaqItems = contactFaqBlocks
+            .map(function (row) {
+              var question = readInput(row, 'question');
+              var answer = readInput(row, 'answer');
+
+              if (!question && !answer) {
+                return null;
+              }
+
+              return {
+                question: question || 'FAQ question',
+                answer: answer || 'FAQ answer',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 20);
+
           return {
             siteName: fields.siteName.value,
             showProjectsNavItem: fields.showProjectsNavItem.value === '1',
@@ -1491,13 +1931,50 @@
             testimonialsTitle: fields.testimonialsTitle.value,
             testimonialsDescription: fields.testimonialsDescription.value,
             testimonials: testimonials,
+            contactHeroLabel: fields.contactHeroLabel.value,
+            contactHeroTitle: fields.contactHeroTitle.value,
+            contactHeroDescription: fields.contactHeroDescription.value,
+            contactDetailsLabel: fields.contactDetailsLabel.value,
+            contactDetailsTitle: fields.contactDetailsTitle.value,
+            contactDetailsDescription: fields.contactDetailsDescription.value,
+            contactMessageLabel: fields.contactMessageLabel.value,
+            contactMessageValue: fields.contactMessageValue.value,
+            contactCallLabel: fields.contactCallLabel.value,
+            contactCallValue: fields.contactCallValue.value,
+            contactLocationLabel: fields.contactLocationLabel.value,
+            contactLocationValue: fields.contactLocationValue.value,
+            contactHoursLabel: fields.contactHoursLabel.value,
+            contactHoursLine1: fields.contactHoursLine1.value,
+            contactHoursLine2: fields.contactHoursLine2.value,
+            contactHoursLine3: fields.contactHoursLine3.value,
+            contactFormTitle: fields.contactFormTitle.value,
+            contactFormLabelFullName: fields.contactFormLabelFullName.value,
+            contactFormLabelEmail: fields.contactFormLabelEmail.value,
+            contactFormLabelPhone: fields.contactFormLabelPhone.value,
+            contactFormLabelProjectType: fields.contactFormLabelProjectType.value,
+            contactFormLabelMessage: fields.contactFormLabelMessage.value,
+            contactFormPlaceholderFullName: fields.contactFormPlaceholderFullName.value,
+            contactFormPlaceholderEmail: fields.contactFormPlaceholderEmail.value,
+            contactFormPlaceholderPhone: fields.contactFormPlaceholderPhone.value,
+            contactFormPlaceholderMessage: fields.contactFormPlaceholderMessage.value,
+            contactFormProjectTypePlaceholder: fields.contactFormProjectTypePlaceholder.value,
+            contactFormButtonText: fields.contactFormButtonText.value,
+            contactFormProjectTypeOptions: contactFormProjectTypeOptions,
+            contactFaqLabel: fields.contactFaqLabel.value,
+            contactFaqTitle: fields.contactFaqTitle.value,
+            contactFaqDescription: fields.contactFaqDescription.value,
+            contactFaqItems: contactFaqItems,
             brands: brands,
           };
         }
 
         navButtons.forEach(function (btn) {
           btn.addEventListener('click', function () {
-            activateSection(btn.getAttribute('data-section'));
+            var sectionKey = btn.getAttribute('data-section');
+            activateSection(sectionKey);
+            if (sectionKey === 'messages') {
+              renderContactMessages();
+            }
           });
         });
 
@@ -1601,26 +2078,99 @@
           refreshTestimonialNumbers();
         });
 
-        document.getElementById('saveBtn').addEventListener('click', function () {
+        document.getElementById('addContactProjectTypeBtn').addEventListener('click', function () {
+          var count = contactProjectTypeRows.querySelectorAll('.service-row').length;
+          if (count >= 20) {
+            alert('Maximum 20 project types allowed');
+            return;
+          }
+          contactProjectTypeRows.appendChild(
+            createContactProjectTypeRow({ label: '', value: '' }, count)
+          );
+          refreshContactProjectTypeNumbers();
+        });
+
+        document.getElementById('addContactFaqBtn').addEventListener('click', function () {
+          var count = contactFaqRows.querySelectorAll('.service-row').length;
+          if (count >= 20) {
+            alert('Maximum 20 FAQs allowed');
+            return;
+          }
+          contactFaqRows.appendChild(createContactFaqRow({ question: '', answer: '' }, count));
+          refreshContactFaqNumbers();
+        });
+
+        document
+          .getElementById('clearContactMessagesBtn')
+          .addEventListener('click', function () {
+            if (!confirm('Delete all saved contact form messages?')) {
+              return;
+            }
+            if (api && typeof api.clearContactMessages === 'function') {
+              api.clearContactMessages();
+            }
+            renderContactMessages();
+            setStatus('All contact messages were deleted.', false);
+          });
+
+        document.getElementById('saveBtn').addEventListener('click', async function () {
           try {
+            var saveButton = document.getElementById('saveBtn');
+            saveButton.disabled = true;
+            setStatus('Saving and syncing to live...', false);
+
             var data = collectFromForm();
-            api.saveContent(data);
-            setStatus('Saved successfully. Refresh homepage to see updates.', false);
+            var finalContent = data;
+            var remoteSaved = true;
+            if (typeof api.saveContentWithStatus === 'function') {
+              var result = await api.saveContentWithStatus(data);
+              finalContent = result.content;
+              remoteSaved = result.remoteSaved;
+            } else {
+              api.saveContent(data);
+            }
+
+            if (typeof api.applyToContactPage === 'function') {
+              api.applyToContactPage(finalContent);
+            }
+
+            if (remoteSaved) {
+              setStatus('Saved successfully and synced live for all users.', false);
+            } else {
+              setStatus(
+                'Saved locally, but live sync failed. Check /api/site-content.php on server.',
+                true
+              );
+            }
           } catch (error) {
             setStatus(
               'Save failed. Uploaded image may be too large for browser storage.',
               true
             );
+          } finally {
+            document.getElementById('saveBtn').disabled = false;
           }
         });
 
-        document.getElementById('resetBtn').addEventListener('click', function () {
+        document.getElementById('resetBtn').addEventListener('click', async function () {
           if (!confirm('Reset to default content?')) {
             return;
           }
-          api.resetContent();
+
+          var remoteSaved = true;
+          if (typeof api.resetContentWithStatus === 'function') {
+            var result = await api.resetContentWithStatus();
+            remoteSaved = result.remoteSaved;
+          } else {
+            api.resetContent();
+          }
+
           loadIntoForm();
-          setStatus('Reset completed.', false);
+          if (remoteSaved) {
+            setStatus('Reset completed and synced live.', false);
+          } else {
+            setStatus('Reset locally, but live sync failed. Check /api/site-content.php.', true);
+          }
         });
 
         document.getElementById('logoutBtn').addEventListener('click', function () {
