@@ -149,6 +149,10 @@
         font-size: 0.92rem;
       }
 
+      .status.error {
+        color: var(--danger);
+      }
+
       .hide {
         display: none;
       }
@@ -239,6 +243,61 @@
         margin-bottom: 0.45rem;
       }
 
+      .service-row {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.7rem;
+        margin-bottom: 0.7rem;
+        background: #fcfdff;
+      }
+
+      .service-row-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.55rem;
+      }
+
+      .service-row-title {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      .service-row-grid {
+        display: grid;
+        gap: 0.55rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .service-row-grid .full {
+        grid-column: 1 / -1;
+      }
+
+      .upload-box {
+        border: 1px dashed #bfd0e5;
+        border-radius: 10px;
+        padding: 0.5rem;
+        background: #f8fbff;
+      }
+
+      .upload-box input[type='file'] {
+        padding: 0.3rem;
+        border: 0;
+      }
+
+      .service-preview {
+        margin-top: 0.4rem;
+        width: 150px;
+        height: 105px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #fff;
+        display: block;
+      }
+
       .hint {
         color: var(--muted);
         font-size: 0.84rem;
@@ -273,6 +332,7 @@
       @media (max-width: 760px) {
         .grid-2,
         .brand-row,
+        .service-row-grid,
         .nav-list {
           grid-template-columns: 1fr;
         }
@@ -321,6 +381,7 @@
               <button class="nav-btn" type="button" data-section="logos">Logos</button>
               <button class="nav-btn" type="button" data-section="about">About Section</button>
               <button class="nav-btn" type="button" data-section="hero">Hero Text</button>
+              <button class="nav-btn" type="button" data-section="services">Services</button>
               <button class="nav-btn" type="button" data-section="brands">Brands</button>
             </div>
 
@@ -399,6 +460,32 @@
               </div>
             </section>
 
+            <section class="section" id="section-services">
+              <h2>Services Section</h2>
+              <p>Our Services title, description এবং service cards এখান থেকে edit করুন।</p>
+              <div class="grid grid-2">
+                <label>
+                  Services Label
+                  <input id="servicesLabel" type="text" />
+                </label>
+                <label>
+                  Services Title
+                  <input id="servicesTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  Services Description
+                  <textarea id="servicesDescription"></textarea>
+                </label>
+              </div>
+              <div id="serviceRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addServiceBtn" type="button">+ Add Service</button>
+              </div>
+              <p class="hint">
+                Image URL দিন, অথবা file upload করুন। Upload করা image browser localStorage-এ save হবে।
+              </p>
+            </section>
+
             <section class="section" id="section-brands">
               <h2>Brand List</h2>
               <p>Brand Name / Logo URL / Link</p>
@@ -431,6 +518,7 @@
         var loginPass = document.getElementById('loginPass');
         var status = document.getElementById('status');
         var brandRows = document.getElementById('brandRows');
+        var serviceRows = document.getElementById('serviceRows');
 
         var navButtons = Array.from(document.querySelectorAll('.nav-btn'));
         var sections = {
@@ -438,6 +526,7 @@
           logos: document.getElementById('section-logos'),
           about: document.getElementById('section-about'),
           hero: document.getElementById('section-hero'),
+          services: document.getElementById('section-services'),
           brands: document.getElementById('section-brands'),
         };
 
@@ -451,6 +540,9 @@
           shortTitle: document.getElementById('shortTitle'),
           heroTitle: document.getElementById('heroTitle'),
           heroDescription: document.getElementById('heroDescription'),
+          servicesLabel: document.getElementById('servicesLabel'),
+          servicesTitle: document.getElementById('servicesTitle'),
+          servicesDescription: document.getElementById('servicesDescription'),
         };
 
         function isLoggedIn() {
@@ -463,6 +555,32 @@
           } else {
             sessionStorage.removeItem(api.SESSION_KEY);
           }
+        }
+
+        function setStatus(message, isError) {
+          status.textContent = message || '';
+          status.classList.toggle('error', Boolean(isError));
+        }
+
+        function resolvePreviewUrl(url) {
+          if (typeof url !== 'string') {
+            return '';
+          }
+
+          var trimmed = url.trim();
+          if (!trimmed) {
+            return '';
+          }
+
+          if (/^(data:|blob:|https?:|\/)/i.test(trimmed)) {
+            return trimmed;
+          }
+
+          if (trimmed.indexOf('./') === 0 || trimmed.indexOf('../') === 0) {
+            return trimmed;
+          }
+
+          return '../' + trimmed;
         }
 
         function activateSection(key) {
@@ -535,6 +653,155 @@
           });
         }
 
+        function createServiceRow(service, index) {
+          var placeholderPreview =
+            'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27140%27 viewBox=%270 0 200 140%27%3E%3Crect width=%27200%27 height=%27140%27 fill=%27%23f2f5fa%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23718295%27 font-size=%2712%27 font-family=%27Arial%27 dy=%27.35em%27%3ENo preview%3C/text%3E%3C/svg%3E';
+          var row = document.createElement('div');
+          row.className = 'service-row';
+          row.setAttribute('data-row-type', 'service');
+
+          var head = document.createElement('div');
+          head.className = 'service-row-head';
+
+          var rowTitle = document.createElement('p');
+          rowTitle.className = 'service-row-title';
+          rowTitle.textContent = 'Service #' + String(index + 1).padStart(2, '0');
+
+          var remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'btn btn-ghost';
+          remove.textContent = 'Remove';
+          remove.addEventListener('click', function () {
+            row.remove();
+            refreshServiceNumbers();
+          });
+
+          head.appendChild(rowTitle);
+          head.appendChild(remove);
+          row.appendChild(head);
+
+          var grid = document.createElement('div');
+          grid.className = 'service-row-grid';
+
+          var titleLabel = document.createElement('label');
+          titleLabel.className = 'full';
+          titleLabel.textContent = 'Service Title';
+
+          var titleInput = document.createElement('input');
+          titleInput.type = 'text';
+          titleInput.value = (service && service.title) || '';
+          titleInput.setAttribute('data-field', 'title');
+          titleLabel.appendChild(titleInput);
+          grid.appendChild(titleLabel);
+
+          var descriptionLabel = document.createElement('label');
+          descriptionLabel.className = 'full';
+          descriptionLabel.textContent = 'Service Description';
+
+          var descriptionInput = document.createElement('textarea');
+          descriptionInput.value = (service && service.description) || '';
+          descriptionInput.setAttribute('data-field', 'description');
+          descriptionLabel.appendChild(descriptionInput);
+          grid.appendChild(descriptionLabel);
+
+          var imageLabel = document.createElement('label');
+          imageLabel.className = 'full';
+          imageLabel.textContent = 'Image URL';
+
+          var imageInput = document.createElement('input');
+          imageInput.type = 'text';
+          imageInput.placeholder = 'images/picture-01@1x.webp';
+          imageInput.value = (service && service.image) || '';
+          imageInput.setAttribute('data-field', 'image');
+          imageLabel.appendChild(imageInput);
+          grid.appendChild(imageLabel);
+
+          var altLabel = document.createElement('label');
+          altLabel.className = 'full';
+          altLabel.textContent = 'Image Alt Text';
+
+          var altInput = document.createElement('input');
+          altInput.type = 'text';
+          altInput.value = (service && service.alt) || '';
+          altInput.setAttribute('data-field', 'alt');
+          altLabel.appendChild(altInput);
+          grid.appendChild(altLabel);
+
+          var uploadBox = document.createElement('div');
+          uploadBox.className = 'upload-box full';
+
+          var uploadLabel = document.createElement('label');
+          uploadLabel.textContent = 'Upload Image (JPG/PNG/WebP)';
+
+          var fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/png,image/jpeg,image/webp';
+          fileInput.setAttribute('data-field', 'upload');
+          uploadLabel.appendChild(fileInput);
+
+          var preview = document.createElement('img');
+          preview.className = 'service-preview';
+          preview.alt = (service && service.alt) || (service && service.title) || 'Service image preview';
+          preview.src = resolvePreviewUrl((service && service.image) || '') || placeholderPreview;
+          preview.setAttribute('data-role', 'preview');
+
+          uploadBox.appendChild(uploadLabel);
+          uploadBox.appendChild(preview);
+          grid.appendChild(uploadBox);
+
+          function syncPreview() {
+            var src = imageInput.value.trim();
+            preview.src = resolvePreviewUrl(src) || placeholderPreview;
+            preview.alt = altInput.value.trim() || titleInput.value.trim() || 'Service image preview';
+          }
+
+          imageInput.addEventListener('input', syncPreview);
+          altInput.addEventListener('input', syncPreview);
+          titleInput.addEventListener('input', syncPreview);
+
+          fileInput.addEventListener('change', function () {
+            var file = fileInput.files && fileInput.files[0];
+            if (!file) {
+              return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (event) {
+              var result = event && event.target ? event.target.result : '';
+              if (typeof result !== 'string' || !result) {
+                return;
+              }
+              imageInput.value = result;
+              preview.src = result;
+              setStatus('Image ready. Click Save to publish this service card.', false);
+            };
+            reader.onerror = function () {
+              setStatus('Image read failed. Try another file.', true);
+            };
+            reader.readAsDataURL(file);
+          });
+
+          row.appendChild(grid);
+          return row;
+        }
+
+        function refreshServiceNumbers() {
+          Array.from(serviceRows.querySelectorAll('.service-row')).forEach(function (row, index) {
+            var rowTitle = row.querySelector('.service-row-title');
+            if (rowTitle) {
+              rowTitle.textContent = 'Service #' + String(index + 1).padStart(2, '0');
+            }
+          });
+        }
+
+        function renderServiceRows(services) {
+          serviceRows.innerHTML = '';
+          services.forEach(function (service, index) {
+            serviceRows.appendChild(createServiceRow(service, index));
+          });
+          refreshServiceNumbers();
+        }
+
         function loadIntoForm() {
           var content = api.loadContent();
           fields.siteName.value = content.siteName || '';
@@ -546,12 +813,17 @@
           fields.shortTitle.value = content.shortTitle || '';
           fields.heroTitle.value = content.heroTitle || '';
           fields.heroDescription.value = content.heroDescription || '';
+          fields.servicesLabel.value = content.servicesLabel || '';
+          fields.servicesTitle.value = content.servicesTitle || '';
+          fields.servicesDescription.value = content.servicesDescription || '';
+          renderServiceRows(content.services || []);
           renderBrandRows(content.brands || []);
-          status.textContent = '';
+          setStatus('', false);
         }
 
         function collectFromForm() {
           var rows = Array.from(brandRows.querySelectorAll('.brand-row'));
+          var serviceBlocks = Array.from(serviceRows.querySelectorAll('.service-row'));
           var brands = rows
             .map(function (row) {
               var name = row.querySelector("input[data-field='name']").value.trim();
@@ -567,6 +839,29 @@
             .filter(Boolean)
             .slice(0, 8);
 
+          var services = serviceBlocks
+            .map(function (row) {
+              var title = row.querySelector("input[data-field='title']").value.trim();
+              var description = row
+                .querySelector("textarea[data-field='description']")
+                .value.trim();
+              var image = row.querySelector("input[data-field='image']").value.trim();
+              var alt = row.querySelector("input[data-field='alt']").value.trim();
+
+              if (!title && !description && !image) {
+                return null;
+              }
+
+              return {
+                title: title || 'Service',
+                description: description || 'Service description',
+                image: image,
+                alt: alt || title || 'Service image',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 12);
+
           return {
             siteName: fields.siteName.value,
             logoWhiteUrl: fields.logoWhiteUrl.value,
@@ -577,6 +872,10 @@
             shortTitle: fields.shortTitle.value,
             heroTitle: fields.heroTitle.value,
             heroDescription: fields.heroDescription.value,
+            servicesLabel: fields.servicesLabel.value,
+            servicesTitle: fields.servicesTitle.value,
+            servicesDescription: fields.servicesDescription.value,
+            services: services,
             brands: brands,
           };
         }
@@ -615,10 +914,32 @@
           brandRows.appendChild(createBrandRow({ name: '', logo: '', link: '#' }));
         });
 
+        document.getElementById('addServiceBtn').addEventListener('click', function () {
+          var count = serviceRows.querySelectorAll('.service-row').length;
+          if (count >= 12) {
+            alert('Maximum 12 services allowed');
+            return;
+          }
+          serviceRows.appendChild(
+            createServiceRow(
+              { title: '', description: '', image: '', alt: '' },
+              count
+            )
+          );
+          refreshServiceNumbers();
+        });
+
         document.getElementById('saveBtn').addEventListener('click', function () {
-          var data = collectFromForm();
-          api.saveContent(data);
-          status.textContent = 'Saved successfully. Refresh homepage to see updates.';
+          try {
+            var data = collectFromForm();
+            api.saveContent(data);
+            setStatus('Saved successfully. Refresh homepage to see updates.', false);
+          } catch (error) {
+            setStatus(
+              'Save failed. Uploaded image may be too large for browser storage.',
+              true
+            );
+          }
         });
 
         document.getElementById('resetBtn').addEventListener('click', function () {
@@ -627,7 +948,7 @@
           }
           api.resetContent();
           loadIntoForm();
-          status.textContent = 'Reset completed.';
+          setStatus('Reset completed.', false);
         });
 
         document.getElementById('logoutBtn').addEventListener('click', function () {
