@@ -16,52 +16,52 @@
     heroTitle: 'Building Your Vision from the Ground Up',
     heroDescription:
       'We offer reliable construction services with a focus on unmatched quality, ensuring projects are completed on time and within budget.',
-    servicesLabel: 'Our Services',
-    servicesTitle: 'We Build Everything You Need',
+    servicesLabel: 'OUR EXPERTISE',
+    servicesTitle: 'We Supply Everything Your Factory Needs',
     servicesDescription:
-      'We provide tailored construction solutions, designed to meet your needs and executed with precision and expertise.',
+      'We provide premium global sourcing solutions and high-quality industrial raw materials, precisely tailored to ensure uninterrupted production for your business.',
     services: [
       {
-        title: 'General Contracting',
+        title: 'Global Sourcing & Import',
         description:
-          'End-to-end management for seamless project execution, ensuring timely delivery and high-quality.',
+          'Direct factory sourcing from world-class manufacturers in New Zealand, Denmark, Ireland, and beyond, ensuring premium compliance and authentic raw materials.',
         image: 'images/picture-01@1x.webp',
-        alt: 'General Contracting',
+        alt: 'Global Sourcing & Import',
       },
       {
-        title: 'Residential Construction',
+        title: 'Bulk Dairy Solutions',
         description:
-          'Homes that stand the test of time, built with precision, comfort, and durability in mind.',
+          'High-grade 25 KG industrial supply of Full Cream Milk Powder (FCMP), Skimmed Milk Powder (SMP), and Whey Powder for large-scale production.',
         image: 'images/picture-02@1x.webp',
-        alt: 'Residential Construction',
+        alt: 'Bulk Dairy Solutions',
       },
       {
-        title: 'Commercial Construction',
+        title: 'Beverage & Tea Ingredients',
         description:
-          'Scalable infrastructure built for business, designed to meet operational and growth needs.',
+          'Premium Non-Dairy Creamers and specialized ingredients formulated specifically for Ice Cream factories, Malai Tea stalls, and Bubble Tea brands.',
         image: 'images/picture-03@1x.webp',
-        alt: 'Commercial Construction',
+        alt: 'Beverage & Tea Ingredients',
       },
       {
-        title: 'Renovation & Remodeling',
+        title: 'Bakery & Confectionery Essentials',
         description:
-          'Modernize spaces with expert craftsmanship, transforming interiors into functional and stylish.',
+          'Comprehensive raw materials including premium food colors, flavors, stabilizers, and emulsifiers tailored for commercial bakeries and live pastry shops.',
         image: 'images/picture-04@1x.webp',
-        alt: 'Renovation & Remodeling',
+        alt: 'Bakery & Confectionery Essentials',
       },
       {
-        title: 'Architectural Planning',
+        title: 'Industrial Chemical Supply',
         description:
-          'Smart, functional, and aesthetic design planning that maximizes space and enhances the experience.',
+          'Reliable wholesale distribution of food-grade chemicals, texturizers, and acids strictly meeting international food safety (ISO, Halal) standards.',
         image: 'images/picture-05@1x.webp',
-        alt: 'Architectural Planning',
+        alt: 'Industrial Chemical Supply',
       },
       {
-        title: 'Site Management',
+        title: 'B2B Supply Chain & Logistics',
         description:
-          'Safe and efficient oversight from start to finish, ensuring smooth adherence to project goals.',
+          'End-to-end seamless logistics and doorstep delivery across Bangladesh, maintaining rigorous quality control from global shipping to your warehouse.',
         image: 'images/picture-06@1x.webp',
-        alt: 'Site Management',
+        alt: 'B2B Supply Chain & Logistics',
       },
     ],
     brands: [
