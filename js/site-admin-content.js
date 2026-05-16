@@ -64,6 +64,131 @@
         alt: 'B2B Supply Chain & Logistics',
       },
     ],
+    valuesLabel: 'Our Great Values',
+    valuesTitle: 'Why Bricknet?',
+    valuesDescription:
+      'Trusted by industry leaders, built for long-lasting results, and designed to deliver reliable, enduring success.',
+    valuesItems: [
+      {
+        title: 'Quality Craftsmanship',
+        description:
+          'We prioritize attention to detail and use high-quality materials for lasting, exceptional results.',
+        icon: 'images/icon-jackhammer@1x.png',
+        iconAlt: 'Quality Craftsmanship icon',
+      },
+      {
+        title: 'Timely Delivery',
+        description: 'We value your time and ensure projects are completed on schedule.',
+        icon: 'images/icon-clock-seven@1x.png',
+        iconAlt: 'Timely Delivery icon',
+      },
+      {
+        title: 'Safety First',
+        description:
+          'We maintain top safety standards to protect both our team and your property.',
+        icon: 'images/icon-constructor@1x.png',
+        iconAlt: 'Safety First icon',
+      },
+      {
+        title: 'Innovative Solutions',
+        description:
+          'We prioritize attention to detail and use high-quality materials for lasting results.',
+        icon: 'images/icon-rainbow@1x.png',
+        iconAlt: 'Innovative Solutions icon',
+      },
+    ],
+    featuredProjectsTitle: 'Featured Projects',
+    featuredProjectsDescription:
+      'A closer look at our craftsmanship, showcasing quality in every project.',
+    featuredProjects: [
+      {
+        category: 'Residential Construction',
+        title: 'Skyline Residence',
+        year: '2025',
+        client: 'Harrison Family',
+        summary:
+          'A modern hillside home designed for luxury living, incorporating eco-efficient features and offering breathtaking panoramic views that enhance the overall living experience.',
+        image: 'images/gallery-01@1x.webp',
+        imageAlt: 'Modern hillside home with panoramic views',
+      },
+      {
+        category: 'Commercial Construction',
+        title: 'Quantum Business Park',
+        year: '2025',
+        client: 'Innovate Corp.',
+        summary:
+          'A state-of-the-art business park with sustainable infrastructure and cutting-edge facilities, designed to foster innovation and collaboration.',
+        image: 'images/hero-03@1x.webp',
+        imageAlt: 'State-of-the-art business park',
+      },
+      {
+        category: 'Renovation',
+        title: 'The Grand Oak Mansion',
+        year: '2025',
+        client: 'Miller Estate',
+        summary:
+          'A meticulous restoration of a historic mansion, preserving its classic architecture while integrating modern amenities for a luxurious living experience.',
+        image: 'images/hero-04@1x.webp',
+        imageAlt: 'Restored historic mansion',
+      },
+    ],
+    workProcessLabel: 'How We Work',
+    workProcessTitle: 'Our Work Process',
+    workProcessDescription:
+      'A proven process to bring your ideas to life turns concepts into reality through strategic planning and execution.',
+    workProcessSteps: [
+      {
+        title: 'Consultation & Planning',
+        description:
+          'Understanding your needs, budget, and vision ensures your project aligns with your goals, while staying within financial limits and reflecting your ideas.',
+      },
+      {
+        title: 'Design & Architecture',
+        description:
+          'Visualizing the project with practical designs brings your ideas to life, focusing on both functionality and aesthetics, align with your overall vision and goals.',
+      },
+      {
+        title: 'Construction & Management',
+        description:
+          'Building with precision and expert supervision ensures every detail is executed with accuracy, maintaining high quality and meeting your project\'s requirements.',
+      },
+    ],
+    testimonialsLabel: 'Testimonials',
+    testimonialsTitle: 'What Our Clients Say',
+    testimonialsDescription:
+      "Hear from those who've built with us and see how we brought their visions to life.",
+    testimonials: [
+      {
+        quote: '"Bricknet exceeded all expectations. Our home turned out better than we dreamed!"',
+        details:
+          'Their team was professional, skilled, and attentive, providing excellent support throughout. Highly recommended for building your forever home.',
+        name: 'Emily Santos',
+        role: 'Residential Client',
+      },
+      {
+        quote:
+          '"From consultation to handover, their team was responsive, professional, and reliable."',
+        details:
+          'Bricknet expertly managed our office complex construction, meeting deadlines and maintaining high craftsmanship. Their coordination was impressive, and we\'d gladly work with them again.',
+        name: 'Mark Li',
+        role: 'Commercial Developer',
+      },
+      {
+        quote: '"Bricknet exceeded all expectations. Our home turned out better than we dreamed!"',
+        details:
+          'Their team was professional, skilled, and attentive, providing excellent support throughout. Highly recommended for building your forever home.',
+        name: 'Emily Santos',
+        role: 'Residential Client',
+      },
+      {
+        quote:
+          '"From consultation to handover, their team was responsive, professional, and reliable."',
+        details:
+          'Bricknet expertly managed our office complex construction, meeting deadlines and maintaining high craftsmanship. Their coordination was impressive, and we\'d gladly work with them again.',
+        name: 'Mark Li',
+        role: 'Commercial Developer',
+      },
+    ],
     brands: [
       { name: 'Logoipsum 01', logo: 'images/logo-01@1x.webp', link: '#' },
       { name: 'Logoipsum 02', logo: 'images/logo-02@1x.webp', link: '#' },
@@ -119,21 +244,95 @@
     };
   }
 
-  function sanitizeServices(services, fallbackServices) {
-    var defaultServices = Array.isArray(fallbackServices) && fallbackServices.length
-      ? fallbackServices
-      : DEFAULT_CONTENT.services;
+  function cleanValueItem(item, index, fallbackItems) {
+    var fallback =
+      (fallbackItems && fallbackItems[index]) || DEFAULT_CONTENT.valuesItems[index] || {
+        title: 'Value ' + (index + 1),
+        description: 'Value description',
+        icon: '',
+        iconAlt: 'Value icon ' + (index + 1),
+      };
 
-    var list = Array.isArray(services) && services.length ? services : defaultServices;
-    var safeServices = list.slice(0, 12).map(function (service, index) {
-      return cleanService(service, index, defaultServices);
+    var title = cleanString(item && item.title, fallback.title);
+
+    return {
+      title: title,
+      description: cleanString(item && item.description, fallback.description),
+      icon: cleanString(item && item.icon, fallback.icon),
+      iconAlt: cleanString(item && item.iconAlt, title + ' icon'),
+    };
+  }
+
+  function cleanFeaturedProject(item, index, fallbackProjects) {
+    var fallback =
+      (fallbackProjects && fallbackProjects[index]) ||
+      DEFAULT_CONTENT.featuredProjects[index] || {
+        category: 'Project Category',
+        title: 'Project ' + (index + 1),
+        year: '2025',
+        client: 'Client Name',
+        summary: 'Project summary',
+        image: '',
+        imageAlt: 'Featured project image',
+      };
+
+    var title = cleanString(item && item.title, fallback.title);
+
+    return {
+      category: cleanString(item && item.category, fallback.category),
+      title: title,
+      year: cleanString(item && item.year, fallback.year),
+      client: cleanString(item && item.client, fallback.client),
+      summary: cleanString(item && item.summary, fallback.summary),
+      image: cleanString(item && item.image, fallback.image),
+      imageAlt: cleanString(item && item.imageAlt, title),
+    };
+  }
+
+  function cleanWorkProcessStep(item, index, fallbackSteps) {
+    var fallback =
+      (fallbackSteps && fallbackSteps[index]) || DEFAULT_CONTENT.workProcessSteps[index] || {
+        title: 'Step ' + (index + 1),
+        description: 'Step description',
+      };
+
+    return {
+      title: cleanString(item && item.title, fallback.title),
+      description: cleanString(item && item.description, fallback.description),
+    };
+  }
+
+  function cleanTestimonial(item, index, fallbackTestimonials) {
+    var fallback =
+      (fallbackTestimonials && fallbackTestimonials[index]) ||
+      DEFAULT_CONTENT.testimonials[index] || {
+        quote: 'Client quote',
+        details: 'Client testimonial details.',
+        name: 'Client Name',
+        role: 'Client Role',
+      };
+
+    return {
+      quote: cleanString(item && item.quote, fallback.quote),
+      details: cleanString(item && item.details, fallback.details),
+      name: cleanString(item && item.name, fallback.name),
+      role: cleanString(item && item.role, fallback.role),
+    };
+  }
+
+  function sanitizeList(list, fallbackList, cleaner, maxItems) {
+    var defaultList = Array.isArray(fallbackList) && fallbackList.length ? fallbackList : [];
+    var source = Array.isArray(list) && list.length ? list : defaultList;
+
+    var safeList = source.slice(0, maxItems).map(function (item, index) {
+      return cleaner(item, index, defaultList);
     });
 
-    if (!safeServices.length) {
-      return clone(defaultServices);
+    if (!safeList.length) {
+      return clone(defaultList);
     }
 
-    return safeServices;
+    return safeList;
   }
 
   function sanitizeContent(content) {
@@ -168,7 +367,63 @@
         content && content.servicesDescription,
         fallback.servicesDescription
       ),
-      services: sanitizeServices(content && content.services, fallback.services),
+      services: sanitizeList(content && content.services, fallback.services, cleanService, 12),
+      valuesLabel: cleanString(content && content.valuesLabel, fallback.valuesLabel),
+      valuesTitle: cleanString(content && content.valuesTitle, fallback.valuesTitle),
+      valuesDescription: cleanString(
+        content && content.valuesDescription,
+        fallback.valuesDescription
+      ),
+      valuesItems: sanitizeList(
+        content && content.valuesItems,
+        fallback.valuesItems,
+        cleanValueItem,
+        8
+      ),
+      featuredProjectsTitle: cleanString(
+        content && content.featuredProjectsTitle,
+        fallback.featuredProjectsTitle
+      ),
+      featuredProjectsDescription: cleanString(
+        content && content.featuredProjectsDescription,
+        fallback.featuredProjectsDescription
+      ),
+      featuredProjects: sanitizeList(
+        content && content.featuredProjects,
+        fallback.featuredProjects,
+        cleanFeaturedProject,
+        8
+      ),
+      workProcessLabel: cleanString(content && content.workProcessLabel, fallback.workProcessLabel),
+      workProcessTitle: cleanString(content && content.workProcessTitle, fallback.workProcessTitle),
+      workProcessDescription: cleanString(
+        content && content.workProcessDescription,
+        fallback.workProcessDescription
+      ),
+      workProcessSteps: sanitizeList(
+        content && content.workProcessSteps,
+        fallback.workProcessSteps,
+        cleanWorkProcessStep,
+        8
+      ),
+      testimonialsLabel: cleanString(
+        content && content.testimonialsLabel,
+        fallback.testimonialsLabel
+      ),
+      testimonialsTitle: cleanString(
+        content && content.testimonialsTitle,
+        fallback.testimonialsTitle
+      ),
+      testimonialsDescription: cleanString(
+        content && content.testimonialsDescription,
+        fallback.testimonialsDescription
+      ),
+      testimonials: sanitizeList(
+        content && content.testimonials,
+        fallback.testimonials,
+        cleanTestimonial,
+        12
+      ),
       brands: [],
     };
 
@@ -321,6 +576,29 @@
     });
   }
 
+  function syncSwiper(selector) {
+    var slider = document.querySelector(selector);
+    if (!slider || !slider.swiper) {
+      return;
+    }
+
+    var swiper = slider.swiper;
+    swiper.update();
+
+    if (swiper.pagination && typeof swiper.pagination.render === 'function') {
+      swiper.pagination.render();
+      swiper.pagination.update();
+    }
+
+    if (swiper.slides && swiper.slides.length && swiper.activeIndex >= swiper.slides.length) {
+      swiper.slideTo(0, 0);
+    }
+
+    if (swiper.autoplay && typeof swiper.autoplay.start === 'function') {
+      swiper.autoplay.start();
+    }
+  }
+
   function renderBrands(content) {
     var brandList = document.getElementById('admin-brand-list');
     if (!brandList) {
@@ -449,6 +727,395 @@
     });
   }
 
+  function createValuesItemCard(item, index) {
+    var article = document.createElement('article');
+    article.setAttribute('data-aos', 'fade-up');
+    article.setAttribute('data-aos-delay', String(index * 100).padStart(3, '0'));
+    article.className = 'w-full flex flex-col justify-start items-start gap-6';
+
+    var picture = document.createElement('picture');
+    picture.className = 'size-16 bg-primary-light-orange flex justify-center items-center';
+
+    var image = document.createElement('img');
+    image.src = item.icon;
+    image.setAttribute('srcset', item.icon);
+    image.alt = item.iconAlt || item.title + ' icon';
+    image.width = 40;
+    image.height = 40;
+    image.className = 'size-10';
+    image.setAttribute('aria-hidden', 'true');
+    picture.appendChild(image);
+
+    var body = document.createElement('div');
+    body.className = 'self-stretch flex flex-col justify-start items-start gap-2';
+
+    var title = document.createElement('h3');
+    title.className =
+      'self-stretch justify-start text-secondary-navy text-2xl font-medium leading-tight';
+    title.textContent = item.title;
+
+    var description = document.createElement('p');
+    description.className =
+      'self-stretch justify-start text-base-grey text-base font-normal leading-relaxed';
+    description.textContent = item.description;
+
+    body.appendChild(title);
+    body.appendChild(description);
+
+    article.appendChild(picture);
+    article.appendChild(body);
+
+    return article;
+  }
+
+  function renderValues(content) {
+    var valueSections = document.querySelectorAll("section[aria-labelledby='values-title']");
+
+    if (!valueSections.length) {
+      return;
+    }
+
+    valueSections.forEach(function (section) {
+      var label = section.querySelector('span.label.label-solid-orange');
+      if (label) {
+        label.textContent = content.valuesLabel;
+        label.setAttribute('aria-label', content.valuesLabel);
+      }
+
+      var title = section.querySelector('#values-title');
+      if (title) {
+        title.textContent = content.valuesTitle;
+      }
+
+      var lead = section.querySelector('.flex-1 > p');
+      if (lead) {
+        lead.textContent = content.valuesDescription;
+      }
+
+      var valuesGrid = section.querySelector("div[aria-label='Company values']");
+      if (!valuesGrid) {
+        return;
+      }
+
+      valuesGrid.innerHTML = '';
+
+      content.valuesItems.forEach(function (item, index) {
+        valuesGrid.appendChild(createValuesItemCard(item, index));
+      });
+    });
+  }
+
+  function createFeaturedProjectSlide(item) {
+    var slide = document.createElement('div');
+    slide.className =
+      'swiper-slide bg-secondary-navy self-stretch flex flex-col lg:flex-row justify-start lg:justify-between items-start relative gap-10 lg:gap-0';
+
+    var mediaWrap = document.createElement('div');
+    mediaWrap.className = 'aspect-[35/52] lg:aspect-[15/8] w-full lg:w-[71%] relative';
+
+    var picture = document.createElement('picture');
+    picture.className = 'absolute inset-0 z-10';
+
+    var source = document.createElement('source');
+    source.setAttribute('srcset', item.image);
+    source.setAttribute('type', 'image/webp');
+    picture.appendChild(source);
+
+    var image = document.createElement('img');
+    image.className = 'h-full w-full object-cover';
+    image.src = item.image;
+    image.setAttribute('srcset', item.image);
+    image.width = 900;
+    image.height = 480;
+    image.alt = item.imageAlt || item.title;
+    image.loading = 'lazy';
+    picture.appendChild(image);
+
+    var summary = document.createElement('div');
+    summary.className =
+      'absolute inset-0 z-20 px-4 py-6 lg:p-6 bg-gradient-to-t from-black/50 from-[17%] to-black/0 flex flex-col justify-end items-start text-white text-base font-normal leading-relaxed [text-shadow:_0px_4px_4px_rgb(0_0_0_/_0.50)]';
+    summary.textContent = item.summary;
+
+    mediaWrap.appendChild(picture);
+    mediaWrap.appendChild(summary);
+
+    var infoWrap = document.createElement('div');
+    infoWrap.className = 'w-full lg:w-[26%] flex flex-col justify-start items-center';
+
+    var infoBlock = document.createElement('div');
+    infoBlock.className =
+      'self-stretch flex flex-col justify-center items-center lg:items-start gap-10';
+
+    var category = document.createElement('span');
+    category.className = 'label label-outline-white';
+    category.setAttribute('aria-label', item.category);
+    category.textContent = item.category;
+
+    var textBlock = document.createElement('div');
+    textBlock.className =
+      'self-stretch flex flex-col justify-center items-center text-center lg:text-left lg:items-start gap-1.5';
+
+    var title = document.createElement('h3');
+    title.className =
+      'self-stretch justify-center line-clamp-2 text-base-white text-2xl font-medium leading-tight';
+    title.textContent = item.title;
+
+    var year = document.createElement('p');
+    year.className =
+      'self-stretch justify-center text-base-grey-stroke text-base font-normal leading-relaxed';
+    year.textContent = item.year;
+
+    var client = document.createElement('p');
+    client.className =
+      'self-stretch justify-center text-base-grey-stroke text-base font-normal leading-relaxed';
+    client.textContent = item.client;
+
+    textBlock.appendChild(title);
+    textBlock.appendChild(year);
+    textBlock.appendChild(client);
+
+    infoBlock.appendChild(category);
+    infoBlock.appendChild(textBlock);
+    infoWrap.appendChild(infoBlock);
+
+    slide.appendChild(mediaWrap);
+    slide.appendChild(infoWrap);
+
+    return slide;
+  }
+
+  function renderFeaturedProjects(content) {
+    var sections = document.querySelectorAll("section[aria-labelledby='featured-projects-title']");
+
+    if (!sections.length) {
+      return;
+    }
+
+    sections.forEach(function (section) {
+      var title = section.querySelector('#featured-projects-title');
+      if (title) {
+        title.textContent = content.featuredProjectsTitle;
+      }
+
+      var headingRow = section.querySelector('.wrapper > .self-stretch');
+      if (headingRow) {
+        var description = headingRow.querySelector('p');
+        if (description) {
+          description.textContent = content.featuredProjectsDescription;
+        }
+      }
+
+      var list = section.querySelector('#slider-featured-projects .swiper-wrapper');
+      if (!list) {
+        return;
+      }
+
+      list.innerHTML = '';
+      content.featuredProjects.forEach(function (item) {
+        list.appendChild(createFeaturedProjectSlide(item));
+      });
+    });
+
+    syncSwiper('#slider-featured-projects');
+  }
+
+  function createWorkProcessStep(step, index, total) {
+    var article = document.createElement('article');
+    article.setAttribute('data-aos', 'fade-up');
+    article.setAttribute('data-aos-delay', String(index * 100).padStart(3, '0'));
+    article.className =
+      'w-full py-10 border-b-[1.50px] border-base-grey-stroke hover:border-primary-orange transition-all flex flex-col justify-start items-start gap-6';
+
+    var alignments = ['justify-start', 'justify-center', 'justify-end'];
+    var alignClass = alignments[index % alignments.length];
+
+    var head = document.createElement('div');
+    head.className = 'self-stretch flex ' + alignClass + ' items-center gap-6';
+
+    var indexWrap = document.createElement('div');
+    indexWrap.className = 'justify-start';
+
+    var number = document.createElement('span');
+    number.className = 'text-secondary-navy text-xl font-semibold leading-loose';
+    number.textContent = String(index + 1).padStart(2, '0');
+
+    var slash = document.createElement('span');
+    slash.className = 'text-secondary-navy text-xl font-normal leading-loose';
+    slash.textContent = '/';
+
+    var totalCount = document.createElement('span');
+    totalCount.className = 'text-base-grey-stroke text-xl font-normal leading-loose';
+    totalCount.textContent = '(' + String(total).padStart(2, '0') + ')';
+
+    indexWrap.appendChild(number);
+    indexWrap.appendChild(slash);
+    indexWrap.appendChild(totalCount);
+
+    var icon = document.createElement('i');
+    icon.className = 'ph ph-arrow-right text-xl text-secondary-navy';
+    icon.setAttribute('aria-hidden', 'true');
+
+    head.appendChild(indexWrap);
+    head.appendChild(icon);
+
+    var title = document.createElement('h3');
+    title.className =
+      'self-stretch justify-start text-secondary-navy text-2xl font-medium leading-tight';
+    title.textContent = step.title;
+
+    var description = document.createElement('p');
+    description.className =
+      'self-stretch justify-start text-base-grey text-base font-normal leading-relaxed';
+    description.textContent = step.description;
+
+    article.appendChild(head);
+    article.appendChild(title);
+    article.appendChild(description);
+
+    return article;
+  }
+
+  function renderWorkProcess(content) {
+    var sections = document.querySelectorAll("section[aria-labelledby='work-process-title']");
+
+    if (!sections.length) {
+      return;
+    }
+
+    sections.forEach(function (section) {
+      var label = section.querySelector('span.label.label-solid-orange');
+      if (label) {
+        label.textContent = content.workProcessLabel;
+        label.setAttribute('aria-label', content.workProcessLabel);
+      }
+
+      var title = section.querySelector('#work-process-title');
+      if (title) {
+        title.textContent = content.workProcessTitle;
+      }
+
+      var description = section.querySelector('.flex-1 p');
+      if (description) {
+        description.textContent = content.workProcessDescription;
+      }
+
+      var steps = section.querySelector("div[aria-label='Work process steps']");
+      if (!steps) {
+        return;
+      }
+
+      steps.innerHTML = '';
+
+      content.workProcessSteps.forEach(function (step, index) {
+        steps.appendChild(createWorkProcessStep(step, index, content.workProcessSteps.length));
+      });
+    });
+  }
+
+  function createTestimonialSlide(item) {
+    var slide = document.createElement('li');
+    slide.className = 'swiper-slide';
+
+    var blockquote = document.createElement('blockquote');
+    blockquote.className =
+      'p-10 bg-primary-light-orange flex flex-col justify-start items-start gap-10';
+
+    var picture = document.createElement('picture');
+
+    var source = document.createElement('source');
+    source.setAttribute('srcset', 'images/icon-quote.svg');
+    source.setAttribute('type', 'image/svg+xml');
+    picture.appendChild(source);
+
+    var image = document.createElement('img');
+    image.src = 'images/icon-quote@1x.png';
+    image.setAttribute('srcset', 'images/icon-quote@1x.png 1x, images/icon-quote@2x.png 2x');
+    image.alt = 'Quote icon';
+    image.width = 60;
+    image.height = 46;
+    image.setAttribute('aria-hidden', 'true');
+    picture.appendChild(image);
+
+    var contentWrap = document.createElement('div');
+    contentWrap.className = 'self-stretch flex flex-1 flex-col justify-start items-start gap-4';
+
+    var quote = document.createElement('p');
+    quote.className =
+      'self-stretch justify-start text-secondary-navy text-xl font-medium leading-normal';
+    quote.textContent = item.quote;
+
+    var details = document.createElement('p');
+    details.className =
+      'self-stretch mt-auto justify-start text-base-grey text-base font-normal leading-relaxed';
+    details.textContent = item.details;
+
+    contentWrap.appendChild(quote);
+    contentWrap.appendChild(details);
+
+    var footer = document.createElement('footer');
+    footer.className = 'justify-center text-xl';
+
+    var cite = document.createElement('cite');
+
+    var name = document.createElement('span');
+    name.className = 'text-secondary-navy font-semibold leading-relaxed';
+    name.textContent = item.name + ', ';
+
+    var role = document.createElement('span');
+    role.className = 'text-base-grey font-normal leading-relaxed';
+    role.textContent = item.role;
+
+    cite.appendChild(name);
+    cite.appendChild(role);
+    footer.appendChild(cite);
+
+    blockquote.appendChild(picture);
+    blockquote.appendChild(contentWrap);
+    blockquote.appendChild(footer);
+
+    slide.appendChild(blockquote);
+
+    return slide;
+  }
+
+  function renderTestimonials(content) {
+    var sections = document.querySelectorAll("section[aria-labelledby='testimonials-title']");
+
+    if (!sections.length) {
+      return;
+    }
+
+    sections.forEach(function (section) {
+      var label = section.querySelector('span.label.label-solid-orange');
+      if (label) {
+        label.textContent = content.testimonialsLabel;
+        label.setAttribute('aria-label', content.testimonialsLabel);
+      }
+
+      var title = section.querySelector('#testimonials-title');
+      if (title) {
+        title.textContent = content.testimonialsTitle;
+      }
+
+      var description = title && title.parentElement ? title.parentElement.querySelector('p') : null;
+      if (description) {
+        description.textContent = content.testimonialsDescription;
+      }
+
+      var list = section.querySelector('#slider-testimonials .swiper-wrapper');
+      if (!list) {
+        return;
+      }
+
+      list.innerHTML = '';
+      content.testimonials.forEach(function (item) {
+        list.appendChild(createTestimonialSlide(item));
+      });
+    });
+
+    syncSwiper('#slider-testimonials');
+  }
+
   function applyToHomepage(content) {
     if (!content) {
       return;
@@ -459,10 +1126,14 @@
     setText('admin-hero-description', content.heroDescription);
     setText('about-title-text', content.aboutTitle);
     setLink('about-cta-link', content.aboutCtaText, content.aboutCtaUrl);
+
     renderServices(content);
+    renderValues(content);
+    renderFeaturedProjects(content);
+    renderWorkProcess(content);
+    renderTestimonials(content);
 
     setPictureLogoByImageSelector('img.logo-white', content.logoWhiteUrl, content.siteName);
-
     setPictureLogoByImageSelector('img.logo-color', content.logoColorUrl, content.siteName);
 
     setLogoSources("source[srcset*='logo-multi-color']", content.logoFooterUrl);

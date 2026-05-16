@@ -382,6 +382,10 @@
               <button class="nav-btn" type="button" data-section="about">About Section</button>
               <button class="nav-btn" type="button" data-section="hero">Hero Text</button>
               <button class="nav-btn" type="button" data-section="services">Services</button>
+              <button class="nav-btn" type="button" data-section="values">Our Great Values</button>
+              <button class="nav-btn" type="button" data-section="projects">Featured Projects</button>
+              <button class="nav-btn" type="button" data-section="work">How We Work</button>
+              <button class="nav-btn" type="button" data-section="testimonials">Testimonials</button>
               <button class="nav-btn" type="button" data-section="brands">Brands</button>
             </div>
 
@@ -486,6 +490,96 @@
               </p>
             </section>
 
+            <section class="section" id="section-values">
+              <h2>Our Great Values</h2>
+              <p>Values section label, title, description এবং value items edit করুন।</p>
+              <div class="grid grid-2">
+                <label>
+                  Values Label
+                  <input id="valuesLabel" type="text" />
+                </label>
+                <label>
+                  Values Title
+                  <input id="valuesTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  Values Description
+                  <textarea id="valuesDescription"></textarea>
+                </label>
+              </div>
+              <div id="valuesRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addValueBtn" type="button">+ Add Value Item</button>
+              </div>
+            </section>
+
+            <section class="section" id="section-projects">
+              <h2>Featured Projects</h2>
+              <p>Featured projects heading, description এবং slider item content edit করুন।</p>
+              <div class="grid">
+                <label>
+                  Featured Projects Title
+                  <input id="featuredProjectsTitle" type="text" />
+                </label>
+                <label>
+                  Featured Projects Description
+                  <textarea id="featuredProjectsDescription"></textarea>
+                </label>
+              </div>
+              <div id="projectRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addProjectBtn" type="button">+ Add Project Slide</button>
+              </div>
+            </section>
+
+            <section class="section" id="section-work">
+              <h2>How We Work</h2>
+              <p>Work process section label, title, description এবং steps edit করুন।</p>
+              <div class="grid grid-2">
+                <label>
+                  Work Label
+                  <input id="workProcessLabel" type="text" />
+                </label>
+                <label>
+                  Work Title
+                  <input id="workProcessTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  Work Description
+                  <textarea id="workProcessDescription"></textarea>
+                </label>
+              </div>
+              <div id="workRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addWorkStepBtn" type="button">+ Add Work Step</button>
+              </div>
+            </section>
+
+            <section class="section" id="section-testimonials">
+              <h2>Testimonials</h2>
+              <p>Testimonials section label, title, description এবং testimonial cards edit করুন।</p>
+              <div class="grid grid-2">
+                <label>
+                  Testimonials Label
+                  <input id="testimonialsLabel" type="text" />
+                </label>
+                <label>
+                  Testimonials Title
+                  <input id="testimonialsTitle" type="text" />
+                </label>
+                <label class="span-2">
+                  Testimonials Description
+                  <textarea id="testimonialsDescription"></textarea>
+                </label>
+              </div>
+              <div id="testimonialRows" style="margin-top: 0.75rem;"></div>
+              <div class="actions" style="margin-top: 0.55rem;">
+                <button class="btn btn-ghost" id="addTestimonialBtn" type="button">
+                  + Add Testimonial
+                </button>
+              </div>
+            </section>
+
             <section class="section" id="section-brands">
               <h2>Brand List</h2>
               <p>Brand Name / Logo URL / Link</p>
@@ -504,7 +598,7 @@
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-2"></script>
+    <script src="/js/site-admin-content.js?v=20260516-3"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -519,6 +613,11 @@
         var status = document.getElementById('status');
         var brandRows = document.getElementById('brandRows');
         var serviceRows = document.getElementById('serviceRows');
+        var valuesRows = document.getElementById('valuesRows');
+        var projectRows = document.getElementById('projectRows');
+        var workRows = document.getElementById('workRows');
+        var testimonialRows = document.getElementById('testimonialRows');
+        var currentContent = api.loadContent();
 
         var navButtons = Array.from(document.querySelectorAll('.nav-btn'));
         var sections = {
@@ -527,6 +626,10 @@
           about: document.getElementById('section-about'),
           hero: document.getElementById('section-hero'),
           services: document.getElementById('section-services'),
+          values: document.getElementById('section-values'),
+          projects: document.getElementById('section-projects'),
+          work: document.getElementById('section-work'),
+          testimonials: document.getElementById('section-testimonials'),
           brands: document.getElementById('section-brands'),
         };
 
@@ -543,7 +646,85 @@
           servicesLabel: document.getElementById('servicesLabel'),
           servicesTitle: document.getElementById('servicesTitle'),
           servicesDescription: document.getElementById('servicesDescription'),
+          valuesLabel: document.getElementById('valuesLabel'),
+          valuesTitle: document.getElementById('valuesTitle'),
+          valuesDescription: document.getElementById('valuesDescription'),
+          featuredProjectsTitle: document.getElementById('featuredProjectsTitle'),
+          featuredProjectsDescription: document.getElementById('featuredProjectsDescription'),
+          workProcessLabel: document.getElementById('workProcessLabel'),
+          workProcessTitle: document.getElementById('workProcessTitle'),
+          workProcessDescription: document.getElementById('workProcessDescription'),
+          testimonialsLabel: document.getElementById('testimonialsLabel'),
+          testimonialsTitle: document.getElementById('testimonialsTitle'),
+          testimonialsDescription: document.getElementById('testimonialsDescription'),
         };
+
+        function padNumber(value) {
+          return String(value).padStart(2, '0');
+        }
+
+        function createRowShell(titleText, onRemove) {
+          var row = document.createElement('div');
+          row.className = 'service-row';
+
+          var head = document.createElement('div');
+          head.className = 'service-row-head';
+
+          var rowTitle = document.createElement('p');
+          rowTitle.className = 'service-row-title';
+          rowTitle.textContent = titleText;
+
+          var remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'btn btn-ghost';
+          remove.textContent = 'Remove';
+          remove.addEventListener('click', onRemove);
+
+          head.appendChild(rowTitle);
+          head.appendChild(remove);
+          row.appendChild(head);
+
+          var grid = document.createElement('div');
+          grid.className = 'service-row-grid';
+          row.appendChild(grid);
+
+          return { row: row, grid: grid };
+        }
+
+        function createTextField(labelText, fieldName, value, options) {
+          var opts = options || {};
+          var label = document.createElement('label');
+          if (opts.full) {
+            label.className = 'full';
+          }
+          label.textContent = labelText;
+
+          var input;
+          if (opts.textarea) {
+            input = document.createElement('textarea');
+          } else {
+            input = document.createElement('input');
+            input.type = 'text';
+            if (opts.placeholder) {
+              input.placeholder = opts.placeholder;
+            }
+          }
+
+          input.value = value || '';
+          input.setAttribute('data-field', fieldName);
+          label.appendChild(input);
+
+          return label;
+        }
+
+        function refreshNumbers(container, labelPrefix) {
+          Array.from(container.querySelectorAll('.service-row')).forEach(function (row, index) {
+            var rowTitle = row.querySelector('.service-row-title');
+            if (rowTitle) {
+              rowTitle.textContent = labelPrefix + ' #' + padNumber(index + 1);
+            }
+          });
+        }
 
         function isLoggedIn() {
           return sessionStorage.getItem(api.SESSION_KEY) === '1';
@@ -786,12 +967,7 @@
         }
 
         function refreshServiceNumbers() {
-          Array.from(serviceRows.querySelectorAll('.service-row')).forEach(function (row, index) {
-            var rowTitle = row.querySelector('.service-row-title');
-            if (rowTitle) {
-              rowTitle.textContent = 'Service #' + String(index + 1).padStart(2, '0');
-            }
-          });
+          refreshNumbers(serviceRows, 'Service');
         }
 
         function renderServiceRows(services) {
@@ -802,8 +978,160 @@
           refreshServiceNumbers();
         }
 
+        function createValueRow(item, index) {
+          var shell = createRowShell('Value Item #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshValueNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Value Title', 'title', item && item.title, { full: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Value Description', 'description', item && item.description, {
+              full: true,
+              textarea: true,
+            })
+          );
+          shell.grid.appendChild(
+            createTextField('Icon URL', 'icon', item && item.icon, {
+              full: true,
+              placeholder: 'images/icon-jackhammer@1x.png',
+            })
+          );
+          shell.grid.appendChild(
+            createTextField('Icon Alt Text', 'iconAlt', item && item.iconAlt, { full: true })
+          );
+
+          return shell.row;
+        }
+
+        function refreshValueNumbers() {
+          refreshNumbers(valuesRows, 'Value Item');
+        }
+
+        function renderValueRows(items) {
+          valuesRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            valuesRows.appendChild(createValueRow(item, index));
+          });
+          refreshValueNumbers();
+        }
+
+        function createProjectRow(project, index) {
+          var shell = createRowShell('Project Slide #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshProjectNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Category', 'category', project && project.category, { full: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Project Title', 'title', project && project.title, { full: true })
+          );
+          shell.grid.appendChild(createTextField('Year', 'year', project && project.year));
+          shell.grid.appendChild(createTextField('Client', 'client', project && project.client));
+          shell.grid.appendChild(
+            createTextField('Summary', 'summary', project && project.summary, {
+              full: true,
+              textarea: true,
+            })
+          );
+          shell.grid.appendChild(
+            createTextField('Image URL', 'image', project && project.image, {
+              full: true,
+              placeholder: 'images/gallery-01@1x.webp',
+            })
+          );
+          shell.grid.appendChild(
+            createTextField('Image Alt Text', 'imageAlt', project && project.imageAlt, {
+              full: true,
+            })
+          );
+
+          return shell.row;
+        }
+
+        function refreshProjectNumbers() {
+          refreshNumbers(projectRows, 'Project Slide');
+        }
+
+        function renderProjectRows(items) {
+          projectRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            projectRows.appendChild(createProjectRow(item, index));
+          });
+          refreshProjectNumbers();
+        }
+
+        function createWorkStepRow(step, index) {
+          var shell = createRowShell('Work Step #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshWorkNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Step Title', 'title', step && step.title, { full: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Step Description', 'description', step && step.description, {
+              full: true,
+              textarea: true,
+            })
+          );
+
+          return shell.row;
+        }
+
+        function refreshWorkNumbers() {
+          refreshNumbers(workRows, 'Work Step');
+        }
+
+        function renderWorkRows(items) {
+          workRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            workRows.appendChild(createWorkStepRow(item, index));
+          });
+          refreshWorkNumbers();
+        }
+
+        function createTestimonialRow(item, index) {
+          var shell = createRowShell('Testimonial #' + padNumber(index + 1), function () {
+            shell.row.remove();
+            refreshTestimonialNumbers();
+          });
+
+          shell.grid.appendChild(
+            createTextField('Quote', 'quote', item && item.quote, { full: true, textarea: true })
+          );
+          shell.grid.appendChild(
+            createTextField('Details', 'details', item && item.details, {
+              full: true,
+              textarea: true,
+            })
+          );
+          shell.grid.appendChild(createTextField('Client Name', 'name', item && item.name));
+          shell.grid.appendChild(createTextField('Client Role', 'role', item && item.role));
+
+          return shell.row;
+        }
+
+        function refreshTestimonialNumbers() {
+          refreshNumbers(testimonialRows, 'Testimonial');
+        }
+
+        function renderTestimonialRows(items) {
+          testimonialRows.innerHTML = '';
+          items.forEach(function (item, index) {
+            testimonialRows.appendChild(createTestimonialRow(item, index));
+          });
+          refreshTestimonialNumbers();
+        }
+
         function loadIntoForm() {
           var content = api.loadContent();
+          currentContent = content;
           fields.siteName.value = content.siteName || '';
           fields.logoWhiteUrl.value = content.logoWhiteUrl || '';
           fields.logoColorUrl.value = content.logoColorUrl || '';
@@ -816,7 +1144,22 @@
           fields.servicesLabel.value = content.servicesLabel || '';
           fields.servicesTitle.value = content.servicesTitle || '';
           fields.servicesDescription.value = content.servicesDescription || '';
+          fields.valuesLabel.value = content.valuesLabel || '';
+          fields.valuesTitle.value = content.valuesTitle || '';
+          fields.valuesDescription.value = content.valuesDescription || '';
+          fields.featuredProjectsTitle.value = content.featuredProjectsTitle || '';
+          fields.featuredProjectsDescription.value = content.featuredProjectsDescription || '';
+          fields.workProcessLabel.value = content.workProcessLabel || '';
+          fields.workProcessTitle.value = content.workProcessTitle || '';
+          fields.workProcessDescription.value = content.workProcessDescription || '';
+          fields.testimonialsLabel.value = content.testimonialsLabel || '';
+          fields.testimonialsTitle.value = content.testimonialsTitle || '';
+          fields.testimonialsDescription.value = content.testimonialsDescription || '';
           renderServiceRows(content.services || []);
+          renderValueRows(content.valuesItems || []);
+          renderProjectRows(content.featuredProjects || []);
+          renderWorkRows(content.workProcessSteps || []);
+          renderTestimonialRows(content.testimonials || []);
           renderBrandRows(content.brands || []);
           setStatus('', false);
         }
@@ -824,6 +1167,16 @@
         function collectFromForm() {
           var rows = Array.from(brandRows.querySelectorAll('.brand-row'));
           var serviceBlocks = Array.from(serviceRows.querySelectorAll('.service-row'));
+          var valueBlocks = Array.from(valuesRows.querySelectorAll('.service-row'));
+          var projectBlocks = Array.from(projectRows.querySelectorAll('.service-row'));
+          var workStepBlocks = Array.from(workRows.querySelectorAll('.service-row'));
+          var testimonialBlocks = Array.from(testimonialRows.querySelectorAll('.service-row'));
+
+          function readInput(row, fieldName) {
+            var field = row.querySelector("[data-field='" + fieldName + "']");
+            return field ? field.value.trim() : '';
+          }
+
           var brands = rows
             .map(function (row) {
               var name = row.querySelector("input[data-field='name']").value.trim();
@@ -862,6 +1215,92 @@
             .filter(Boolean)
             .slice(0, 12);
 
+          var valuesItems = valueBlocks
+            .map(function (row) {
+              var title = readInput(row, 'title');
+              var description = readInput(row, 'description');
+              var icon = readInput(row, 'icon');
+              var iconAlt = readInput(row, 'iconAlt');
+
+              if (!title && !description && !icon) {
+                return null;
+              }
+
+              return {
+                title: title || 'Value',
+                description: description || 'Value description',
+                icon: icon,
+                iconAlt: iconAlt || title || 'Value icon',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 8);
+
+          var featuredProjects = projectBlocks
+            .map(function (row) {
+              var category = readInput(row, 'category');
+              var title = readInput(row, 'title');
+              var year = readInput(row, 'year');
+              var client = readInput(row, 'client');
+              var summary = readInput(row, 'summary');
+              var image = readInput(row, 'image');
+              var imageAlt = readInput(row, 'imageAlt');
+
+              if (!title && !summary && !image) {
+                return null;
+              }
+
+              return {
+                category: category || 'Project Category',
+                title: title || 'Project',
+                year: year || '2025',
+                client: client || 'Client Name',
+                summary: summary || 'Project summary',
+                image: image,
+                imageAlt: imageAlt || title || 'Featured project image',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 8);
+
+          var workProcessSteps = workStepBlocks
+            .map(function (row) {
+              var title = readInput(row, 'title');
+              var description = readInput(row, 'description');
+
+              if (!title && !description) {
+                return null;
+              }
+
+              return {
+                title: title || 'Step',
+                description: description || 'Step description',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 8);
+
+          var testimonials = testimonialBlocks
+            .map(function (row) {
+              var quote = readInput(row, 'quote');
+              var details = readInput(row, 'details');
+              var name = readInput(row, 'name');
+              var role = readInput(row, 'role');
+
+              if (!quote && !details && !name) {
+                return null;
+              }
+
+              return {
+                quote: quote || 'Client quote',
+                details: details || 'Testimonial details',
+                name: name || 'Client Name',
+                role: role || 'Client Role',
+              };
+            })
+            .filter(Boolean)
+            .slice(0, 12);
+
           return {
             siteName: fields.siteName.value,
             logoWhiteUrl: fields.logoWhiteUrl.value,
@@ -869,6 +1308,7 @@
             logoFooterUrl: fields.logoFooterUrl.value,
             aboutTitle: fields.aboutTitle.value,
             aboutCtaText: fields.aboutCtaText.value,
+            aboutCtaUrl: currentContent.aboutCtaUrl || 'about.html',
             shortTitle: fields.shortTitle.value,
             heroTitle: fields.heroTitle.value,
             heroDescription: fields.heroDescription.value,
@@ -876,6 +1316,21 @@
             servicesTitle: fields.servicesTitle.value,
             servicesDescription: fields.servicesDescription.value,
             services: services,
+            valuesLabel: fields.valuesLabel.value,
+            valuesTitle: fields.valuesTitle.value,
+            valuesDescription: fields.valuesDescription.value,
+            valuesItems: valuesItems,
+            featuredProjectsTitle: fields.featuredProjectsTitle.value,
+            featuredProjectsDescription: fields.featuredProjectsDescription.value,
+            featuredProjects: featuredProjects,
+            workProcessLabel: fields.workProcessLabel.value,
+            workProcessTitle: fields.workProcessTitle.value,
+            workProcessDescription: fields.workProcessDescription.value,
+            workProcessSteps: workProcessSteps,
+            testimonialsLabel: fields.testimonialsLabel.value,
+            testimonialsTitle: fields.testimonialsTitle.value,
+            testimonialsDescription: fields.testimonialsDescription.value,
+            testimonials: testimonials,
             brands: brands,
           };
         }
@@ -927,6 +1382,63 @@
             )
           );
           refreshServiceNumbers();
+        });
+
+        document.getElementById('addValueBtn').addEventListener('click', function () {
+          var count = valuesRows.querySelectorAll('.service-row').length;
+          if (count >= 8) {
+            alert('Maximum 8 value items allowed');
+            return;
+          }
+          valuesRows.appendChild(
+            createValueRow({ title: '', description: '', icon: '', iconAlt: '' }, count)
+          );
+          refreshValueNumbers();
+        });
+
+        document.getElementById('addProjectBtn').addEventListener('click', function () {
+          var count = projectRows.querySelectorAll('.service-row').length;
+          if (count >= 8) {
+            alert('Maximum 8 project slides allowed');
+            return;
+          }
+          projectRows.appendChild(
+            createProjectRow(
+              {
+                category: '',
+                title: '',
+                year: '',
+                client: '',
+                summary: '',
+                image: '',
+                imageAlt: '',
+              },
+              count
+            )
+          );
+          refreshProjectNumbers();
+        });
+
+        document.getElementById('addWorkStepBtn').addEventListener('click', function () {
+          var count = workRows.querySelectorAll('.service-row').length;
+          if (count >= 8) {
+            alert('Maximum 8 work steps allowed');
+            return;
+          }
+          workRows.appendChild(createWorkStepRow({ title: '', description: '' }, count));
+          refreshWorkNumbers();
+        });
+
+        document.getElementById('addTestimonialBtn').addEventListener('click', function () {
+          var count = testimonialRows.querySelectorAll('.service-row').length;
+          if (count >= 12) {
+            alert('Maximum 12 testimonials allowed');
+            return;
+          }
+          testimonialRows.appendChild(
+            createTestimonialRow({ quote: '', details: '', name: '', role: '' }, count)
+          );
+          refreshTestimonialNumbers();
         });
 
         document.getElementById('saveBtn').addEventListener('click', function () {
