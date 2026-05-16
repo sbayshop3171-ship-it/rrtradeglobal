@@ -6,6 +6,7 @@
     siteName: 'Bricknet',
     logoWhiteUrl: 'images/logo-white.svg',
     logoColorUrl: 'images/logo-color.svg',
+    logoFooterUrl: 'images/logo-multi-color.svg',
     shortTitle: 'Your Best-Construction Partner',
     heroTitle: 'Building Your Vision from the Ground Up',
     heroDescription:
@@ -51,6 +52,7 @@
       siteName: cleanString(content && content.siteName, fallback.siteName),
       logoWhiteUrl: cleanString(content && content.logoWhiteUrl, fallback.logoWhiteUrl),
       logoColorUrl: cleanString(content && content.logoColorUrl, fallback.logoColorUrl),
+      logoFooterUrl: cleanString(content && content.logoFooterUrl, fallback.logoFooterUrl),
       shortTitle: cleanString(content && content.shortTitle, fallback.shortTitle),
       heroTitle: cleanString(content && content.heroTitle, fallback.heroTitle),
       heroDescription: cleanString(content && content.heroDescription, fallback.heroDescription),
@@ -106,7 +108,23 @@
   function setLogoImages(selector, logoUrl, siteName) {
     document.querySelectorAll(selector).forEach(function (img) {
       img.setAttribute('src', logoUrl);
+      img.setAttribute('srcset', logoUrl);
       img.setAttribute('alt', siteName + ' Logo');
+    });
+  }
+
+  function setPictureLogoByImageSelector(selector, logoUrl, siteName) {
+    document.querySelectorAll(selector).forEach(function (img) {
+      img.setAttribute('src', logoUrl);
+      img.setAttribute('srcset', logoUrl);
+      img.setAttribute('alt', siteName + ' Logo');
+
+      var picture = img.closest('picture');
+      if (picture) {
+        picture.querySelectorAll('source').forEach(function (source) {
+          source.setAttribute('srcset', logoUrl);
+        });
+      }
     });
   }
 
@@ -155,11 +173,12 @@
     setText('hero-title', content.heroTitle);
     setText('admin-hero-description', content.heroDescription);
 
-    setLogoSources("source[srcset*='logo-white']", content.logoWhiteUrl);
-    setLogoImages('img.logo-white', content.logoWhiteUrl, content.siteName);
+    setPictureLogoByImageSelector('img.logo-white', content.logoWhiteUrl, content.siteName);
 
-    setLogoSources("source[srcset*='logo-color']", content.logoColorUrl);
-    setLogoImages('img.logo-color', content.logoColorUrl, content.siteName);
+    setPictureLogoByImageSelector('img.logo-color', content.logoColorUrl, content.siteName);
+
+    setLogoSources("source[srcset*='logo-multi-color']", content.logoFooterUrl);
+    setLogoImages("img[src*='logo-multi-color']", content.logoFooterUrl, content.siteName);
 
     renderBrands(content);
   }
@@ -174,10 +193,5 @@
     applyToHomepage: applyToHomepage,
   };
 
-  if (
-    document.getElementById('admin-short-title') ||
-    document.getElementById('admin-brand-list')
-  ) {
-    applyToHomepage(loadContent());
-  }
+  applyToHomepage(loadContent());
 })();
