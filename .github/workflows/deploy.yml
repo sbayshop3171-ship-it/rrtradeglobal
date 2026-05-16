@@ -63,7 +63,7 @@ jobs:
             --exclude ".git/" \
             --exclude ".github/" \
             --exclude ".DS_Store" \
-            -e "ssh -i ~/.ssh/id_ed25519 -p $port" \
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -p $port" \
             ./ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
 
       - name: Run post-deploy command (optional)
@@ -76,7 +76,7 @@ jobs:
           set -euo pipefail
           port="${DEPLOY_PORT:-22}"
           if [ -n "${DEPLOY_POST_CMD:-}" ]; then
-            ssh -i ~/.ssh/id_ed25519 -p "$port" "${DEPLOY_USER}@${DEPLOY_HOST}" "set -e; ${DEPLOY_POST_CMD}"
+            ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -p "$port" "${DEPLOY_USER}@${DEPLOY_HOST}" "set -e; ${DEPLOY_POST_CMD}"
           else
             echo "DEPLOY_POST_CMD not set, skipping post-deploy command."
           fi
