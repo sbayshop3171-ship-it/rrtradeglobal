@@ -417,7 +417,10 @@
 
             <section class="section" id="section-logos">
               <h2>Logo Settings</h2>
-              <p>Header এবং footer logo URL change করুন। Save দিলে website logo update হবে।</p>
+              <p>
+                Header এবং footer logo URL change করুন অথবা image upload করুন। Save দিলে website
+                logo update হবে।
+              </p>
               <div class="grid grid-2">
                 <label>
                   Logo URL (White Header)
@@ -431,6 +434,41 @@
                   Logo URL (Footer)
                   <input id="logoFooterUrl" type="text" placeholder="images/logo-multi-color.svg" />
                 </label>
+              </div>
+              <div class="grid grid-2" style="margin-top: 0.55rem;">
+                <div class="upload-box">
+                  <label>
+                    Upload White Logo (SVG/PNG/JPG/WebP)
+                    <input
+                      id="logoWhiteUpload"
+                      type="file"
+                      accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                    />
+                  </label>
+                  <img id="logoWhitePreview" class="service-preview" alt="White logo preview" />
+                </div>
+                <div class="upload-box">
+                  <label>
+                    Upload Color Logo (SVG/PNG/JPG/WebP)
+                    <input
+                      id="logoColorUpload"
+                      type="file"
+                      accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                    />
+                  </label>
+                  <img id="logoColorPreview" class="service-preview" alt="Color logo preview" />
+                </div>
+                <div class="upload-box span-2">
+                  <label>
+                    Upload Footer Logo (SVG/PNG/JPG/WebP)
+                    <input
+                      id="logoFooterUpload"
+                      type="file"
+                      accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                    />
+                  </label>
+                  <img id="logoFooterPreview" class="service-preview" alt="Footer logo preview" />
+                </div>
               </div>
             </section>
 
@@ -451,16 +489,35 @@
 
             <section class="section" id="section-hero">
               <h2>Hero Content</h2>
-              <p>Homepage headline and short description.</p>
-              <div class="grid">
-                <label>
+              <p>Homepage headline, short description, এবং background image change করুন।</p>
+              <div class="grid grid-2">
+                <label class="span-2">
                   Main Title
                   <textarea id="heroTitle"></textarea>
                 </label>
-                <label>
+                <label class="span-2">
                   Description
                   <textarea id="heroDescription"></textarea>
                 </label>
+                <label class="span-2">
+                  Background Image URL
+                  <input id="heroBackgroundUrl" type="text" placeholder="images/hero-01@1x.webp" />
+                </label>
+                <div class="upload-box span-2">
+                  <label>
+                    Upload Hero Background (JPG/PNG/WebP)
+                    <input
+                      id="heroBackgroundUpload"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                    />
+                  </label>
+                  <img
+                    id="heroBackgroundPreview"
+                    class="service-preview"
+                    alt="Hero background preview"
+                  />
+                </div>
               </div>
             </section>
 
@@ -598,7 +655,7 @@
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-4"></script>
+    <script src="/js/site-admin-content.js?v=20260516-6"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -643,6 +700,7 @@
           shortTitle: document.getElementById('shortTitle'),
           heroTitle: document.getElementById('heroTitle'),
           heroDescription: document.getElementById('heroDescription'),
+          heroBackgroundUrl: document.getElementById('heroBackgroundUrl'),
           servicesLabel: document.getElementById('servicesLabel'),
           servicesTitle: document.getElementById('servicesTitle'),
           servicesDescription: document.getElementById('servicesDescription'),
@@ -762,6 +820,94 @@
           }
 
           return '../' + trimmed;
+        }
+
+        var STATIC_IMAGE_UPLOADS = [
+          {
+            fieldKey: 'logoWhiteUrl',
+            fileInputId: 'logoWhiteUpload',
+            previewId: 'logoWhitePreview',
+            name: 'white logo',
+          },
+          {
+            fieldKey: 'logoColorUrl',
+            fileInputId: 'logoColorUpload',
+            previewId: 'logoColorPreview',
+            name: 'color logo',
+          },
+          {
+            fieldKey: 'logoFooterUrl',
+            fileInputId: 'logoFooterUpload',
+            previewId: 'logoFooterPreview',
+            name: 'footer logo',
+          },
+          {
+            fieldKey: 'heroBackgroundUrl',
+            fileInputId: 'heroBackgroundUpload',
+            previewId: 'heroBackgroundPreview',
+            name: 'hero background',
+          },
+        ];
+
+        var STATIC_PREVIEW_PLACEHOLDER =
+          'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27140%27 viewBox=%270 0 200 140%27%3E%3Crect width=%27200%27 height=%27140%27 fill=%27%23f2f5fa%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23718295%27 font-size=%2712%27 font-family=%27Arial%27 dy=%27.35em%27%3ENo preview%3C/text%3E%3C/svg%3E';
+
+        function refreshStaticImagePreview(config) {
+          var field = fields[config.fieldKey];
+          var preview = document.getElementById(config.previewId);
+          if (!field || !preview) {
+            return;
+          }
+
+          var src = resolvePreviewUrl(field.value.trim());
+          preview.src = src || STATIC_PREVIEW_PLACEHOLDER;
+          preview.alt = config.name + ' preview';
+        }
+
+        function refreshAllStaticImagePreviews() {
+          STATIC_IMAGE_UPLOADS.forEach(function (config) {
+            refreshStaticImagePreview(config);
+          });
+        }
+
+        function bindStaticImageUploaders() {
+          STATIC_IMAGE_UPLOADS.forEach(function (config) {
+            var field = fields[config.fieldKey];
+            var fileInput = document.getElementById(config.fileInputId);
+            if (!field || !fileInput) {
+              return;
+            }
+
+            field.addEventListener('input', function () {
+              refreshStaticImagePreview(config);
+            });
+
+            fileInput.addEventListener('change', function () {
+              var file = fileInput.files && fileInput.files[0];
+              if (!file) {
+                return;
+              }
+
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                var result = event && event.target ? event.target.result : '';
+                if (typeof result !== 'string' || !result) {
+                  return;
+                }
+
+                field.value = result;
+                refreshStaticImagePreview(config);
+                setStatus(
+                  config.name + ' image ready. Click Save to publish your change.',
+                  false
+                );
+              };
+              reader.onerror = function () {
+                setStatus('Image read failed. Try another file.', true);
+              };
+              reader.readAsDataURL(file);
+            });
+          });
         }
 
         function activateSection(key) {
@@ -1141,6 +1287,7 @@
           fields.shortTitle.value = content.shortTitle || '';
           fields.heroTitle.value = content.heroTitle || '';
           fields.heroDescription.value = content.heroDescription || '';
+          fields.heroBackgroundUrl.value = content.heroBackgroundUrl || '';
           fields.servicesLabel.value = content.servicesLabel || '';
           fields.servicesTitle.value = content.servicesTitle || '';
           fields.servicesDescription.value = content.servicesDescription || '';
@@ -1161,6 +1308,7 @@
           renderWorkRows(content.workProcessSteps || []);
           renderTestimonialRows(content.testimonials || []);
           renderBrandRows(content.brands || []);
+          refreshAllStaticImagePreviews();
           setStatus('', false);
         }
 
@@ -1312,6 +1460,7 @@
             shortTitle: fields.shortTitle.value,
             heroTitle: fields.heroTitle.value,
             heroDescription: fields.heroDescription.value,
+            heroBackgroundUrl: fields.heroBackgroundUrl.value,
             servicesLabel: fields.servicesLabel.value,
             servicesTitle: fields.servicesTitle.value,
             servicesDescription: fields.servicesDescription.value,
@@ -1470,6 +1619,8 @@
           loginPass.value = '';
         });
 
+        bindStaticImageUploaders();
+        refreshAllStaticImagePreviews();
         toggleView();
       })();
     </script>

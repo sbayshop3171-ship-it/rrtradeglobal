@@ -1,6 +1,6 @@
 (function () {
-  var STORAGE_KEY = 'bricknet_admin_content_v1';
-  var COOKIE_KEY = 'bricknet_admin_content_v1_cookie';
+  var STORAGE_KEY = 'bricknet_admin_content_v2';
+  var COOKIE_KEY = 'bricknet_admin_content_v2_cookie';
   var SESSION_KEY = 'bricknet_admin_session_v1';
 
   var CORE_VALUES_VERSION = 'v2';
@@ -18,6 +18,7 @@
     heroTitle: 'Building Your Vision from the Ground Up',
     heroDescription:
       'We offer reliable construction services with a focus on unmatched quality, ensuring projects are completed on time and within budget.',
+    heroBackgroundUrl: 'images/hero-01@1x.webp',
     servicesLabel: 'OUR EXPERTISE',
     servicesTitle: 'We Supply Everything Your Factory Needs',
     servicesDescription:
@@ -106,34 +107,34 @@
       'A closer look at our craftsmanship, showcasing quality in every project.',
     featuredProjects: [
       {
-        category: 'Residential Construction',
-        title: 'Skyline Residence',
-        year: '2025',
-        client: 'Harrison Family',
-        summary:
-          'A modern hillside home designed for luxury living, incorporating eco-efficient features and offering breathtaking panoramic views that enhance the overall living experience.',
-        image: 'images/gallery-01@1x.webp',
-        imageAlt: 'Modern hillside home with panoramic views',
-      },
-      {
         category: 'Commercial Construction',
         title: 'Quantum Business Park',
         year: '2025',
-        client: 'Innovate Corp.',
+        client: 'Global Enterprise Consortium',
         summary:
-          'A state-of-the-art business park with sustainable infrastructure and cutting-edge facilities, designed to foster innovation and collaboration.',
-        image: 'images/hero-03@1x.webp',
-        imageAlt: 'State-of-the-art business park',
+          'A state-of-the-art business park with sustainable infrastructure and cutting-edge facilities, designed to foster innovation and collaboration among global enterprises.',
+        image: 'images/featured-quantum-business-park@1x.webp',
+        imageAlt: 'State-of-the-art sustainable business park with modern office architecture',
       },
       {
-        category: 'Renovation',
-        title: 'The Grand Oak Mansion',
-        year: '2025',
-        client: 'Miller Estate',
+        category: 'Sustainable Development',
+        title: 'Eco-Link Corporate Campus',
+        year: '2026',
+        client: 'Eco-Link Ventures',
         summary:
-          'A meticulous restoration of a historic mansion, preserving its classic architecture while integrating modern amenities for a luxurious living experience.',
-        image: 'images/hero-04@1x.webp',
-        imageAlt: 'Restored historic mansion',
+          'A master-planned corporate campus featuring advanced green building technology, solar power integration, and collaborative open-air workspaces.',
+        image: 'images/featured-eco-link-corporate-campus@1x.webp',
+        imageAlt: 'Green corporate campus with solar integration and open-air workspaces',
+      },
+      {
+        category: 'Civic & Commercial',
+        title: 'Aethelred Retail Center',
+        year: '2027',
+        client: 'Aethelred Development Group',
+        summary:
+          'A landmark commercial destination combining premium retail outlets, modern architectural forms, and fluid community spaces designed for tomorrow.',
+        image: 'images/featured-aethelred-retail-center@1x.webp',
+        imageAlt: 'Landmark modern retail center with community-focused public spaces',
       },
     ],
     workProcessLabel: 'How We Work',
@@ -383,6 +384,10 @@
       shortTitle: cleanString(content && content.shortTitle, fallback.shortTitle),
       heroTitle: cleanString(content && content.heroTitle, fallback.heroTitle),
       heroDescription: cleanString(content && content.heroDescription, fallback.heroDescription),
+      heroBackgroundUrl: cleanString(
+        content && content.heroBackgroundUrl,
+        fallback.heroBackgroundUrl
+      ),
       servicesLabel: cleanString(content && content.servicesLabel, fallback.servicesLabel),
       servicesTitle: cleanString(content && content.servicesTitle, fallback.servicesTitle),
       servicesDescription: cleanString(
@@ -601,6 +606,25 @@
           source.setAttribute('srcset', logoUrl);
         });
       }
+    });
+  }
+
+  function setPictureImageById(imageId, imageUrl) {
+    var image = document.getElementById(imageId);
+    if (!image || !imageUrl) {
+      return;
+    }
+
+    image.setAttribute('src', imageUrl);
+    image.setAttribute('srcset', imageUrl);
+
+    var picture = image.closest('picture');
+    if (!picture) {
+      return;
+    }
+
+    picture.querySelectorAll('source').forEach(function (source) {
+      source.setAttribute('srcset', imageUrl);
     });
   }
 
@@ -1152,6 +1176,7 @@
     setText('admin-short-title', content.shortTitle);
     setText('hero-title', content.heroTitle);
     setText('admin-hero-description', content.heroDescription);
+    setPictureImageById('hero-parallax', content.heroBackgroundUrl);
     setText('about-title-text', content.aboutTitle);
     setLink('about-cta-link', content.aboutCtaText, content.aboutCtaUrl);
 
