@@ -4,20 +4,37 @@
   var SESSION_KEY = 'bricknet_admin_session_v1';
   var CONTACT_MESSAGES_KEY = 'bricknet_contact_messages_v1';
   var CONTACT_MESSAGES_COOKIE_KEY = 'bricknet_contact_messages_v1_cookie';
-  var REMOTE_CONTENT_ENDPOINT = resolveRemoteContentEndpoint();
+  var LIVE_ORIGIN_FALLBACK = 'https://rrtradeglobal.com';
+  var REMOTE_CONTENT_ENDPOINT = resolveApiEndpoint('site-content.php');
+  var REMOTE_CONTACT_MESSAGES_ENDPOINT = resolveApiEndpoint('contact-messages.php');
   var remoteContentSyncPromise = null;
+  var remoteContactMessagesSyncPromise = null;
 
   var CORE_VALUES_VERSION = 'v2';
 
-  function resolveRemoteContentEndpoint() {
+  function isLocalHostName(hostname) {
+    return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
+  }
+
+  function resolveApiEndpoint(fileName) {
     var path =
       typeof window !== 'undefined' && window.location && window.location.pathname
         ? window.location.pathname
         : '';
-    if (path.indexOf('/admin/') !== -1) {
-      return '../api/site-content.php';
+    var hostname =
+      typeof window !== 'undefined' && window.location && window.location.hostname
+        ? window.location.hostname
+        : '';
+
+    if (isLocalHostName(hostname)) {
+      return LIVE_ORIGIN_FALLBACK + '/api/' + fileName;
     }
-    return 'api/site-content.php';
+
+    if (path.indexOf('/admin/') !== -1) {
+      return '../api/' + fileName;
+    }
+
+    return 'api/' + fileName;
   }
 
   var DEFAULT_CONTENT = {
@@ -699,7 +716,7 @@
       return null;
     }
 
-    if (payload.content && typeof payload.content === 'object' && !Array.isArray(payload.content)) {
+    if (payload.content && typeof payload.content === 'object') {
       return payload.content;
     }
 
@@ -947,6 +964,206 @@
     clearCookie(COOKIE_KEY);
   }
 
+  function emitContactMessagesUpdated(messages) {
+    if (!window || typeof window.dispatchEvent !== 'function') {
+      return;
+    }
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent('bricknet-contact-messages-updated', {
+          detail: clone(messages || []),
+        })
+      );
+    } catch (error) {
+      // CustomEvent may be unavailable in old browsers.
+    }
+  }
+
+  function normalizeContactMessage(entry, fallbackId) {
+    var now = new Date();
+    var fullName = cleanString(entry && entry.fullName, 'Visitor');
+    var email = cleanString(entry && entry.email, '');
+    var phone = cleanString(entry && entry.phone, '');
+    var projectType = cleanString(entry && entry.projectType, '');
+    var message = cleanString(entry && entry.message, '');
+    var pageUrl = cleanString(entry && entry.pageUrl, '');
+    var createdAt = cleanString(entry && entry.createdAt, now.toISOString());
+    var generatedId = String(now.getTime()) + '-' + Math.floor(Math.random() * 1000000);
+    var id = cleanString(entry && entry.id, fallbackId || generatedId);
+
+    return {
+      id: id,
+      createdAt: createdAt,
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      projectType: projectType,
+      message: message,
+      pageUrl: pageUrl,
+    };
+  }
+
+  function sanitizeContactMessages(messages) {
+    if (!Array.isArray(messages)) {
+      return [];
+    }
+
+    var safe = [];
+    messages.forEach(function (entry, index) {
+      if (safe.length >= 500) {
+        return;
+      }
+
+      var normalized = normalizeContactMessage(entry, 'msg-' + index);
+      if (!normalized.email || !normalized.message) {
+        return;
+      }
+      safe.push(normalized);
+    });
+
+    return safe;
+  }
+
+  function parseRemoteContactMessagesPayload(payload) {
+    if (!payload) {
+      return null;
+    }
+
+    if (Array.isArray(payload)) {
+      return payload;
+    }
+
+    if (typeof payload === 'object' && Array.isArray(payload.messages)) {
+      return payload.messages;
+    }
+
+    return null;
+  }
+
+  function fetchRemoteContactMessages() {
+    if (typeof window.fetch !== 'function') {
+      return Promise.resolve(null);
+    }
+
+    return window
+      .fetch(REMOTE_CONTACT_MESSAGES_ENDPOINT, {
+        method: 'GET',
+        cache: 'no-store',
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          return null;
+        }
+
+        return response
+          .json()
+          .then(function (payload) {
+            return parseRemoteContactMessagesPayload(payload);
+          })
+          .catch(function () {
+            return null;
+          });
+      })
+      .then(function (messages) {
+        if (!messages) {
+          return null;
+        }
+        return sanitizeContactMessages(messages);
+      })
+      .catch(function () {
+        return null;
+      });
+  }
+
+  function pushRemoteContactMessage(entry) {
+    if (typeof window.fetch !== 'function') {
+      return Promise.resolve(false);
+    }
+
+    return window
+      .fetch(REMOTE_CONTACT_MESSAGES_ENDPOINT, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: entry }),
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          return false;
+        }
+
+        return response
+          .json()
+          .then(function (payload) {
+            return Boolean(payload && payload.success !== false);
+          })
+          .catch(function () {
+            return false;
+          });
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
+  function clearRemoteContactMessages() {
+    if (typeof window.fetch !== 'function') {
+      return Promise.resolve(false);
+    }
+
+    return window
+      .fetch(REMOTE_CONTACT_MESSAGES_ENDPOINT, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          return false;
+        }
+
+        return response
+          .json()
+          .then(function (payload) {
+            return Boolean(payload && payload.success !== false);
+          })
+          .catch(function () {
+            return false;
+          });
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
+  function syncRemoteContactMessages() {
+    if (remoteContactMessagesSyncPromise) {
+      return remoteContactMessagesSyncPromise;
+    }
+
+    remoteContactMessagesSyncPromise = fetchRemoteContactMessages()
+      .then(function (messages) {
+        if (!messages) {
+          return null;
+        }
+
+        writeContactMessagesRaw(JSON.stringify(messages));
+        emitContactMessagesUpdated(messages);
+        return messages;
+      })
+      .finally(function () {
+        remoteContactMessagesSyncPromise = null;
+      });
+
+    return remoteContactMessagesSyncPromise;
+  }
+
   function readContactMessagesRaw() {
     try {
       var localRaw = localStorage.getItem(CONTACT_MESSAGES_KEY);
@@ -999,47 +1216,50 @@
       if (!Array.isArray(parsed)) {
         return [];
       }
-      return parsed;
+      var safe = sanitizeContactMessages(parsed);
+      return safe;
     } catch (error) {
       return [];
     }
   }
 
   function saveContactMessage(entry) {
-    var fullName = cleanString(entry && entry.fullName, 'Visitor');
-    var email = cleanString(entry && entry.email, '');
-    var phone = cleanString(entry && entry.phone, '');
-    var projectType = cleanString(entry && entry.projectType, '');
-    var message = cleanString(entry && entry.message, '');
-    var pageUrl = cleanString(entry && entry.pageUrl, '');
-
-    if (!email || !message) {
+    var safeEntry = normalizeContactMessage(entry);
+    if (!safeEntry.email || !safeEntry.message) {
       return false;
     }
 
     var messages = loadContactMessages();
-    var now = new Date();
-    messages.unshift({
-      id: String(now.getTime()) + '-' + Math.floor(Math.random() * 1000000),
-      createdAt: now.toISOString(),
-      fullName: fullName,
-      email: email,
-      phone: phone,
-      projectType: projectType,
-      message: message,
-      pageUrl: pageUrl,
-    });
+    messages.unshift(safeEntry);
 
     if (messages.length > 500) {
       messages = messages.slice(0, 500);
     }
 
     writeContactMessagesRaw(JSON.stringify(messages));
+    emitContactMessagesUpdated(messages);
+
+    pushRemoteContactMessage(safeEntry).then(function (remoteSaved) {
+      if (remoteSaved) {
+        syncRemoteContactMessages();
+      }
+    });
+
     return true;
   }
 
   function clearContactMessages() {
     clearContactMessagesRaw();
+    emitContactMessagesUpdated([]);
+    clearRemoteContactMessages();
+  }
+
+  function clearContactMessagesWithStatus() {
+    clearContactMessagesRaw();
+    emitContactMessagesUpdated([]);
+    return clearRemoteContactMessages().then(function (remoteCleared) {
+      return { remoteCleared: remoteCleared };
+    });
   }
 
   function setText(id, value) {
@@ -1869,15 +2089,18 @@
     resetContent: resetContent,
     resetContentWithStatus: resetContentWithStatus,
     syncRemoteContent: syncRemoteContent,
+    syncRemoteContactMessages: syncRemoteContactMessages,
     applyToHomepage: applyToHomepage,
     applyToContactPage: applyToContactPage,
     loadContactMessages: loadContactMessages,
     saveContactMessage: saveContactMessage,
     clearContactMessages: clearContactMessages,
+    clearContactMessagesWithStatus: clearContactMessagesWithStatus,
   };
 
   var content = loadContent();
   applyToHomepage(content);
   applyToContactPage(content);
   syncRemoteContent();
+  syncRemoteContactMessages();
 })();

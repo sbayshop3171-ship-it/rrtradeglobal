@@ -860,7 +860,7 @@
       </section>
     </div>
 
-    <script src="/js/site-admin-content.js?v=20260516-10"></script>
+    <script src="/js/site-admin-content.js?v=20260516-11"></script>
     <script>
       (function () {
         var api = window.BricknetAdminContent;
@@ -883,6 +883,7 @@
         var contactFaqRows = document.getElementById('contactFaqRows');
         var contactMessageRows = document.getElementById('contactMessageRows');
         var currentContent = api.loadContent();
+        var isLocalHost = ['localhost', '127.0.0.1', '::1'].indexOf(window.location.hostname) !== -1;
 
         var navButtons = Array.from(document.querySelectorAll('.nav-btn'));
         var sections = {
@@ -1045,6 +1046,13 @@
           status.classList.toggle('error', Boolean(isError));
         }
 
+        function getLiveApiHelp(apiPath) {
+          if (isLocalHost) {
+            return 'Use https://rrtradeglobal.com/admin/index.html for live sync.';
+          }
+          return 'Enable PHP for ' + apiPath + '.';
+        }
+
         function resolvePreviewUrl(url) {
           if (typeof url !== 'string') {
             return '';
@@ -1189,17 +1197,48 @@
             .syncRemoteContent()
             .then(function (remoteContent) {
               if (!remoteContent) {
-                setStatus(
-                  'Live API unavailable. Enable PHP execution for /api/site-content.php.',
-                  true
-                );
+                setStatus('Live API unavailable. ' + getLiveApiHelp('/api/site-content.php'), true);
                 return;
               }
               loadIntoForm();
               setStatus('Latest live content synced.', false);
+              syncLiveMessages({ showSuccessStatus: false, showErrorStatus: false });
             })
             .catch(function () {
               setStatus('Live sync failed. Check /api/site-content.php availability.', true);
+            });
+        }
+
+        function syncLiveMessages(options) {
+          var opts = options || {};
+          if (!api || typeof api.syncRemoteContactMessages !== 'function') {
+            return Promise.resolve(null);
+          }
+
+          return api
+            .syncRemoteContactMessages()
+            .then(function (remoteMessages) {
+              if (!Array.isArray(remoteMessages)) {
+                if (opts.showErrorStatus) {
+                  setStatus(
+                    'Contact messages API unavailable. ' + getLiveApiHelp('/api/contact-messages.php'),
+                    true
+                  );
+                }
+                return null;
+              }
+
+              renderContactMessages();
+              if (opts.showSuccessStatus) {
+                setStatus('Live contact messages synced.', false);
+              }
+              return remoteMessages;
+            })
+            .catch(function () {
+              if (opts.showErrorStatus) {
+                setStatus('Contact messages sync failed. Check /api/contact-messages.php.', true);
+              }
+              return null;
             });
         }
 
@@ -1978,6 +2017,7 @@
             activateSection(sectionKey);
             if (sectionKey === 'messages') {
               renderContactMessages();
+              syncLiveMessages({ showSuccessStatus: true, showErrorStatus: true });
             }
           });
         });
@@ -2106,15 +2146,30 @@
 
         document
           .getElementById('clearContactMessagesBtn')
-          .addEventListener('click', function () {
+          .addEventListener('click', async function () {
             if (!confirm('Delete all saved contact form messages?')) {
               return;
             }
+
+            var remoteCleared = true;
             if (api && typeof api.clearContactMessages === 'function') {
-              api.clearContactMessages();
+              if (typeof api.clearContactMessagesWithStatus === 'function') {
+                var clearResult = await api.clearContactMessagesWithStatus();
+                remoteCleared = clearResult.remoteCleared;
+              } else {
+                api.clearContactMessages();
+              }
             }
+
             renderContactMessages();
-            setStatus('All contact messages were deleted.', false);
+            if (remoteCleared) {
+              setStatus('All contact messages were deleted (live sync complete).', false);
+            } else {
+              setStatus(
+                'Messages cleared locally only. ' + getLiveApiHelp('/api/contact-messages.php'),
+                true
+              );
+            }
           });
 
         document.getElementById('saveBtn').addEventListener('click', async function () {
@@ -2141,10 +2196,7 @@
             if (remoteSaved) {
               setStatus('Saved successfully and synced live for all users.', false);
             } else {
-              setStatus(
-                'Saved locally only. Live API failed, enable PHP for /api/site-content.php.',
-                true
-              );
+              setStatus('Saved locally only. Live API failed. ' + getLiveApiHelp('/api/site-content.php'), true);
             }
           } catch (error) {
             setStatus(
@@ -2173,7 +2225,7 @@
           if (remoteSaved) {
             setStatus('Reset completed and synced live.', false);
           } else {
-            setStatus('Reset locally only. Live API failed, enable PHP for /api/site-content.php.', true);
+            setStatus('Reset locally only. Live API failed. ' + getLiveApiHelp('/api/site-content.php'), true);
           }
         });
 

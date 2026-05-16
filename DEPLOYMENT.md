@@ -20,7 +20,10 @@ If you use shared hosting/cPanel, use your real web root path (for example `publ
 
 ### Required for Global Admin Content Sync
 
-This project now uses `api/site-content.php` to store admin content globally for all users.
+This project now uses API endpoints to store live admin data globally for all users:
+
+- `api/site-content.php` (site content)
+- `api/contact-messages.php` (contact form submissions)
 
 - Your hosting must support PHP.
 - The `storage/` folder inside the deployed site must be writable by PHP.
@@ -37,11 +40,14 @@ Quick check after deploy:
 
 ```bash
 curl https://your-domain.com/api/site-content.php
+curl https://your-domain.com/api/contact-messages.php
 ```
 
 You should get JSON like:
 
 `{"success":true,"content":null}`
+
+`{"success":true,"messages":[]}`
 
 If you see raw PHP code in the browser instead of JSON, PHP execution is disabled for the domain.  
 Enable PHP in your hosting control panel (or move the site to a PHP-enabled host), then test again.
