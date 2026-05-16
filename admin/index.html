@@ -319,6 +319,7 @@
             <div class="nav-list">
               <button class="nav-btn active" type="button" data-section="general">General</button>
               <button class="nav-btn" type="button" data-section="logos">Logos</button>
+              <button class="nav-btn" type="button" data-section="about">About Section</button>
               <button class="nav-btn" type="button" data-section="hero">Hero Text</button>
               <button class="nav-btn" type="button" data-section="brands">Brands</button>
             </div>
@@ -364,6 +365,73 @@
                 <label class="span-2">
                   Logo URL (Footer)
                   <input id="logoFooterUrl" type="text" placeholder="images/logo-multi-color.svg" />
+                </label>
+              </div>
+            </section>
+
+            <section class="section" id="section-about">
+              <h2>About Section</h2>
+              <p>About block-এর title, button, statistics এখানে থেকে edit করুন।</p>
+              <div class="grid grid-2">
+                <label>
+                  Section Label
+                  <input id="aboutLabel" type="text" />
+                </label>
+                <label>
+                  About Button Text
+                  <input id="aboutCtaText" type="text" />
+                </label>
+                <label class="span-2">
+                  About Button URL
+                  <input id="aboutCtaUrl" type="text" placeholder="about.html" />
+                </label>
+                <label class="span-2">
+                  About Title (Prefix)
+                  <textarea id="aboutTitlePrefix"></textarea>
+                </label>
+                <label class="span-2">
+                  About Title (Highlight Text)
+                  <input id="aboutTitleHighlight" type="text" />
+                </label>
+                <label class="span-2">
+                  About Title (Suffix)
+                  <textarea id="aboutTitleSuffix"></textarea>
+                </label>
+
+                <label>
+                  Stat 1 Value
+                  <input id="aboutStat1Value" type="text" />
+                </label>
+                <label>
+                  Stat 1 Label
+                  <input id="aboutStat1Label" type="text" />
+                </label>
+
+                <label>
+                  Stat 2 Value
+                  <input id="aboutStat2Value" type="text" />
+                </label>
+                <label>
+                  Stat 2 Label
+                  <input id="aboutStat2Label" type="text" />
+                </label>
+
+                <label>
+                  Stat 3 Value
+                  <input id="aboutStat3Value" type="text" />
+                </label>
+                <label>
+                  Stat 3 Label
+                  <input id="aboutStat3Label" type="text" />
+                </label>
+
+                <label>
+                  Stat 4 Value
+                  <input id="aboutStat4Value" type="text" />
+                </label>
+                <label>
+                  Stat 4 Label
+                  <input id="aboutStat4Label" type="text" />
                 </label>
               </div>
             </section>
@@ -420,6 +488,7 @@
         var sections = {
           general: document.getElementById('section-general'),
           logos: document.getElementById('section-logos'),
+          about: document.getElementById('section-about'),
           hero: document.getElementById('section-hero'),
           brands: document.getElementById('section-brands'),
         };
@@ -429,6 +498,20 @@
           logoWhiteUrl: document.getElementById('logoWhiteUrl'),
           logoColorUrl: document.getElementById('logoColorUrl'),
           logoFooterUrl: document.getElementById('logoFooterUrl'),
+          aboutLabel: document.getElementById('aboutLabel'),
+          aboutTitlePrefix: document.getElementById('aboutTitlePrefix'),
+          aboutTitleHighlight: document.getElementById('aboutTitleHighlight'),
+          aboutTitleSuffix: document.getElementById('aboutTitleSuffix'),
+          aboutCtaText: document.getElementById('aboutCtaText'),
+          aboutCtaUrl: document.getElementById('aboutCtaUrl'),
+          aboutStat1Value: document.getElementById('aboutStat1Value'),
+          aboutStat1Label: document.getElementById('aboutStat1Label'),
+          aboutStat2Value: document.getElementById('aboutStat2Value'),
+          aboutStat2Label: document.getElementById('aboutStat2Label'),
+          aboutStat3Value: document.getElementById('aboutStat3Value'),
+          aboutStat3Label: document.getElementById('aboutStat3Label'),
+          aboutStat4Value: document.getElementById('aboutStat4Value'),
+          aboutStat4Label: document.getElementById('aboutStat4Label'),
           shortTitle: document.getElementById('shortTitle'),
           heroTitle: document.getElementById('heroTitle'),
           heroDescription: document.getElementById('heroDescription'),
@@ -522,6 +605,20 @@
           fields.logoWhiteUrl.value = content.logoWhiteUrl || '';
           fields.logoColorUrl.value = content.logoColorUrl || '';
           fields.logoFooterUrl.value = content.logoFooterUrl || '';
+          fields.aboutLabel.value = content.aboutLabel || '';
+          fields.aboutTitlePrefix.value = content.aboutTitlePrefix || '';
+          fields.aboutTitleHighlight.value = content.aboutTitleHighlight || '';
+          fields.aboutTitleSuffix.value = content.aboutTitleSuffix || '';
+          fields.aboutCtaText.value = content.aboutCtaText || '';
+          fields.aboutCtaUrl.value = content.aboutCtaUrl || '';
+          fields.aboutStat1Value.value = (content.aboutStats && content.aboutStats[0] && content.aboutStats[0].value) || '';
+          fields.aboutStat1Label.value = (content.aboutStats && content.aboutStats[0] && content.aboutStats[0].label) || '';
+          fields.aboutStat2Value.value = (content.aboutStats && content.aboutStats[1] && content.aboutStats[1].value) || '';
+          fields.aboutStat2Label.value = (content.aboutStats && content.aboutStats[1] && content.aboutStats[1].label) || '';
+          fields.aboutStat3Value.value = (content.aboutStats && content.aboutStats[2] && content.aboutStats[2].value) || '';
+          fields.aboutStat3Label.value = (content.aboutStats && content.aboutStats[2] && content.aboutStats[2].label) || '';
+          fields.aboutStat4Value.value = (content.aboutStats && content.aboutStats[3] && content.aboutStats[3].value) || '';
+          fields.aboutStat4Label.value = (content.aboutStats && content.aboutStats[3] && content.aboutStats[3].label) || '';
           fields.shortTitle.value = content.shortTitle || '';
           fields.heroTitle.value = content.heroTitle || '';
           fields.heroDescription.value = content.heroDescription || '';
@@ -551,6 +648,18 @@
             logoWhiteUrl: fields.logoWhiteUrl.value,
             logoColorUrl: fields.logoColorUrl.value,
             logoFooterUrl: fields.logoFooterUrl.value,
+            aboutLabel: fields.aboutLabel.value,
+            aboutTitlePrefix: fields.aboutTitlePrefix.value,
+            aboutTitleHighlight: fields.aboutTitleHighlight.value,
+            aboutTitleSuffix: fields.aboutTitleSuffix.value,
+            aboutCtaText: fields.aboutCtaText.value,
+            aboutCtaUrl: fields.aboutCtaUrl.value,
+            aboutStats: [
+              { value: fields.aboutStat1Value.value, label: fields.aboutStat1Label.value },
+              { value: fields.aboutStat2Value.value, label: fields.aboutStat2Label.value },
+              { value: fields.aboutStat3Value.value, label: fields.aboutStat3Label.value },
+              { value: fields.aboutStat4Value.value, label: fields.aboutStat4Label.value },
+            ],
             shortTitle: fields.shortTitle.value,
             heroTitle: fields.heroTitle.value,
             heroDescription: fields.heroDescription.value,

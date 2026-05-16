@@ -462,7 +462,7 @@
       <div
         class="self-stretch flex flex-col justify-start items-center lg:items-start gap-10"
       >
-        <span class="label label-solid-orange" aria-label="About Us">
+        <span id="about-badge-label" class="label label-solid-orange" aria-label="About Us">
           About Us
         </span>
         
@@ -474,11 +474,12 @@
             class="max-w-[800px] w-full text-secondary-navy text-3xl font-medium leading-tight lg:mr-5 text-center lg:text-left"
             id="about-title"
           >
-            With decades of experience, we specialize in turning ideas into
-            <span class="text-primary-orange">well-designed structures</span>
-            that stand the test of time.
+            <span id="about-title-prefix">With decades of experience, we specialize in turning ideas into</span>
+            <span id="about-title-highlight" class="text-primary-orange">well-designed structures</span>
+            <span id="about-title-suffix">that stand the test of time.</span>
           </div>
           <a
+            id="about-cta-link"
             href="about.html"
             class="btn group btn-outline-dark"
             aria-label="Get to Know
@@ -486,8 +487,9 @@
            
             tabindex="0"
           >
-            Get to Know
+            <span data-role="about-cta-text">Get to Know
                   Us
+            </span>
             <i
               class="btn-icon ph ph-arrow-right text-xl"
               aria-hidden="true"
@@ -507,12 +509,14 @@
          
         >
           <div
+            id="about-stat-1-value"
             class="text-center justify-start text-secondary-navy text-6xl font-medium leading-tight"
             aria-label="Years of Experience: 10+"
           >
             10+
           </div>
           <div
+            id="about-stat-1-label"
             class="text-center justify-start text-base-grey text-lg font-normal leading-tight"
           >
             Years of Experience
@@ -525,12 +529,14 @@
          
         >
           <div
+            id="about-stat-2-value"
             class="text-center justify-start text-secondary-navy text-6xl font-medium leading-tight"
             aria-label="Projects Completed: 1500+"
           >
             1500+
           </div>
           <div
+            id="about-stat-2-label"
             class="text-center justify-start text-base-grey text-lg font-normal leading-tight"
           >
             Projects Completed
@@ -543,12 +549,14 @@
          
         >
           <div
+            id="about-stat-3-value"
             class="text-center justify-start text-secondary-navy text-6xl font-medium leading-tight"
             aria-label="Customer Satisfaction Score: 4.8/5"
           >
             4.8/5
           </div>
           <div
+            id="about-stat-3-label"
             class="text-center justify-start text-base-grey text-lg font-normal leading-tight"
           >
             Customer Satisfaction Score
@@ -561,12 +569,14 @@
          
         >
           <div
+            id="about-stat-4-value"
             class="text-center justify-start text-secondary-navy text-6xl font-medium leading-tight"
             aria-label="Project Success Rate: 98%"
           >
             98%
           </div>
           <div
+            id="about-stat-4-label"
             class="text-center justify-start text-base-grey text-lg font-normal leading-tight"
           >
             Project Success Rate
