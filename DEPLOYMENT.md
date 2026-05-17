@@ -109,4 +109,6 @@ Then check:
 ## Notes
 
 - Files are synced with `rsync --delete`, so removed files in git will also be removed from server.
+- Live runtime data is stored in `storage/` and is excluded from deploy sync so admin content/messages do not reset on each push.
+- Put server-only uploaded files under `storage/` (for example `storage/uploads/`) if you want them to survive deploys.
 - Keep `DEPLOY_SSH_KEY` secret private.

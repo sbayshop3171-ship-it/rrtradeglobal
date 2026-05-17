@@ -68,6 +68,7 @@ jobs:
             --exclude ".git/" \
             --exclude ".github/" \
             --exclude ".DS_Store" \
+            --exclude "storage/" \
             -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -p $port" \
             ./ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH%/}/"
 
