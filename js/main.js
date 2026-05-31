@@ -276,7 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
             position: 'center', // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {
-              background: 'linear-gradient(to right, #00b09b, #96c93d)',
+              background: 'linear-gradient(135deg, #0c6b55 0%, #0d8361 100%)',
+              borderRadius: '0.5rem',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              fontWeight: '600',
             },
           }).showToast();
         } else {
@@ -292,7 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
             position: 'center', // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {
-              background: 'linear-gradient(to right, #ff4b4b, #ff0000)',
+              background: 'linear-gradient(135deg, #a63f2a 0%, #c14a32 100%)',
+              borderRadius: '0.5rem',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              fontWeight: '600',
             },
           }).showToast();
         }
@@ -308,7 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
           position: 'center', // `left`, `center` or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
-            background: 'linear-gradient(to right, #ff4b4b, #ff0000)',
+            background: 'linear-gradient(135deg, #a63f2a 0%, #c14a32 100%)',
+            borderRadius: '0.5rem',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            fontWeight: '600',
           },
         }).showToast();
       }

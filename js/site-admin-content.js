@@ -43,7 +43,7 @@
     logoColorUrl: 'images/logo-color.svg',
     logoFooterUrl: 'images/logo-multi-color.svg',
     aboutTitle:
-      'With global sourcing experience, we specialize in delivering premium, certified food ingredients directly to Bangladesh\'s industries.',
+      'With over 15 years of experience, Bricknet specializes in delivering premium construction services and quality building solutions to clients across the region.'
     aboutCtaText: 'Get to Know Us',
     aboutCtaUrl: 'about.html',
     showProjectsNavItem: true,
@@ -121,51 +121,51 @@
       },
     ],
     servicesLabel: 'OUR EXPERTISE',
-    servicesTitle: 'We Supply Everything Your Factory Needs',
+    servicesTitle: 'Premium Construction & Building Services',
     servicesDescription:
-      'We provide premium global sourcing solutions and high-quality industrial raw materials, precisely tailored to ensure uninterrupted production for your business.',
+      'We deliver comprehensive construction solutions with a focus on quality, reliability, and professional craftsmanship tailored to meet your project needs.',
     services: [
       {
-        title: 'Global Sourcing & Import',
+        title: 'Residential Construction',
         description:
-          'Direct factory sourcing from world-class manufacturers in New Zealand, Denmark, Ireland, and beyond, ensuring premium compliance and authentic raw materials.',
+          'Expert design and build services for homes and residential complexes. We transform your vision into reality with attention to detail and superior craftsmanship.',
         image: 'images/picture-01@1x.webp',
-        alt: 'Global Sourcing & Import',
+        alt: 'Residential Construction',
       },
       {
-        title: 'Bulk Dairy Solutions',
+        title: 'Commercial Construction',
         description:
-          'High-grade 25 KG industrial supply of Full Cream Milk Powder (FCMP), Skimmed Milk Powder (SMP), and Whey Powder for large-scale production.',
+          'Professional construction solutions for office buildings, retail spaces, and commercial facilities. Quality and efficiency on every project.',
         image: 'images/picture-02@1x.webp',
-        alt: 'Bulk Dairy Solutions',
+        alt: 'Commercial Construction',
       },
       {
-        title: 'Beverage & Tea Ingredients',
+        title: 'Renovation & Remodeling',
         description:
-          'Premium Non-Dairy Creamers and specialized ingredients formulated specifically for Ice Cream factories, Malai Tea stalls, and Bubble Tea brands.',
+          'Expert renovation services to upgrade and modernize existing properties. We handle everything from planning to execution with precision.',
         image: 'images/picture-03@1x.webp',
-        alt: 'Beverage & Tea Ingredients',
+        alt: 'Renovation & Remodeling',
       },
       {
-        title: 'Bakery & Confectionery Essentials',
+        title: 'Project Management',
         description:
-          'Comprehensive raw materials including premium food colors, flavors, stabilizers, and emulsifiers tailored for commercial bakeries and live pastry shops.',
+          'Comprehensive project oversight ensuring timely delivery, quality standards, and budget management throughout your construction journey.',
         image: 'images/picture-04@1x.webp',
-        alt: 'Bakery & Confectionery Essentials',
+        alt: 'Project Management',
       },
       {
-        title: 'Industrial Chemical Supply',
+        title: 'Architectural Design',
         description:
-          'Reliable wholesale distribution of food-grade chemicals, texturizers, and acids strictly meeting international food safety (ISO, Halal) standards.',
+          'Innovative architectural designs that blend functionality with aesthetic appeal, creating spaces that inspire and perform.',
         image: 'images/picture-05@1x.webp',
-        alt: 'Industrial Chemical Supply',
+        alt: 'Architectural Design',
       },
       {
-        title: 'B2B Supply Chain & Logistics',
+        title: 'Quality Assurance',
         description:
-          'End-to-end seamless logistics and doorstep delivery across Bangladesh, maintaining rigorous quality control from global shipping to your warehouse.',
+          'Rigorous quality control at every stage of construction to ensure projects meet the highest standards and client expectations.',
         image: 'images/picture-06@1x.webp',
-        alt: 'B2B Supply Chain & Logistics',
+        alt: 'Quality Assurance',
       },
     ],
     valuesLabel: 'Our Great Values',
@@ -177,30 +177,30 @@
       {
         title: 'Premium Quality',
         description:
-          'Symbolizing trusted food-grade quality through lab testing and certified materials.',
+          'Committed to superior craftsmanship and quality materials, ensuring every project meets the highest construction standards.',
         icon: 'images/icon-premium-quality.svg',
         iconAlt: 'Premium Quality icon',
       },
       {
-        title: 'Ontime Supply',
+        title: 'On-Time Delivery',
         description:
-          'Symbolizing on-time logistics and uninterrupted bulk delivery to factory gates.',
+          'We respect your schedule. Our proven project management ensures timely completion without compromising quality or safety.',
         icon: 'images/icon-ontime-supply.svg',
-        iconAlt: 'Ontime Supply icon',
+        iconAlt: 'On-Time Delivery icon',
       },
       {
         title: 'Safety & Compliance',
         description:
-          'Symbolizing 100% hygiene, safe food-grade packing, and Halal/ISO compliance.',
+          'Rigorous adherence to building codes, safety standards, and regulatory compliance on every project, protecting your investment.',
         icon: 'images/icon-safety-compliance.svg',
         iconAlt: 'Safety & Compliance icon',
       },
       {
-        title: 'Global Sourcing',
+        title: 'Professional Team',
         description:
-          'Symbolizing direct global import sourcing from Switzerland, New Zealand, and Denmark.',
+          'Experienced architects, engineers, and skilled craftspeople dedicated to bringing your vision to life with excellence.',
         icon: 'images/icon-global-sourcing.svg',
-        iconAlt: 'Global Sourcing icon',
+        iconAlt: 'Professional Team icon',
       },
     ],
     featuredProjectsTitle: 'Featured Projects',

@@ -45,6 +45,12 @@
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .top:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
       }
 
       .top h1 {
@@ -68,6 +74,19 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn:active {
+        transform: translateY(0);
       }
 
       .btn-primary {
@@ -93,6 +112,13 @@
         border-radius: var(--radius);
         padding: 1rem;
         margin-top: 0.9rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .box:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-color: #c0d4e8;
       }
 
       .box h2 {
@@ -126,6 +152,23 @@
         font: inherit;
         color: var(--ink);
         background: #fff;
+        transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      input:hover,
+      textarea:hover,
+      select:hover {
+        border-color: #a5c1e5;
+        background: #fafbfd;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(17, 80, 138, 0.1);
+        background: #f8fbff;
       }
 
       textarea {
@@ -149,10 +192,23 @@
         margin: 0.35rem 0 0;
         color: var(--ok);
         font-size: 0.92rem;
+        font-weight: 500;
+        animation: slideIn 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
 
       .status.error {
         color: var(--danger);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .hide {
@@ -199,17 +255,21 @@
         font: inherit;
         color: var(--ink);
         cursor: pointer;
+        transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
       }
 
       .nav-btn:hover {
         background: var(--surface-2);
+        border-color: #d4ddea;
       }
 
       .nav-btn.active {
         background: #eaf2fb;
-        border-color: #bfd5ef;
-        color: #0f4a82;
+        border-color: var(--brand);
+        color: var(--brand);
         font-weight: 600;
+        box-shadow: 0 2px 8px rgba(17, 80, 138, 0.1);
       }
 
       .content {
