@@ -535,10 +535,8 @@ button {
   position: relative;
   min-height: 400px;
   overflow: hidden;
-  border-radius: 0.5rem;
-  background: linear-gradient(135deg, rgba(20, 40, 70, 0.3) 0%, rgba(42, 168, 111, 0.15) 100%), 
-              url("../images/hero-05@2x.webp") center/cover no-repeat;
-  background-attachment: fixed;
+  border-radius: 0;
+  background: linear-gradient(135deg, #1a4d7a 0%, #2a8c5d 100%);
 }
 
 .hero-image-wrapper {
