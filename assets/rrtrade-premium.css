@@ -532,7 +532,14 @@ button {
 }
 
 .hero-right {
-  display: none;
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+  border-radius: 0;
+  background: url("../images/hero-illustration.svg") center/contain no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-image-wrapper {
