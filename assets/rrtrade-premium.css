@@ -532,11 +532,7 @@ button {
 }
 
 .hero-right {
-  position: relative;
-  min-height: 400px;
-  overflow: hidden;
-  border-radius: 0;
-  background: linear-gradient(135deg, #1a4d7a 0%, #284f77 100%);
+  display: none;
 }
 
 .hero-image-wrapper {
